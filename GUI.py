@@ -28,12 +28,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Main.addLayout(self.Layout_Controls,0,1)
         self.Layout_Main.setColumnStretch(0,4)
         self.Layout_Main.setColumnStretch(1,1)
-        #self.Layout_Main.setRowStretch(0,1)
 
         self.Image1Label = QtWidgets.QLabel("Image 1")
         self.Image1ComboBox = QtWidgets.QComboBox()
         self.Image1ComboBox.addItems(["Magnitude", "Phase", "Real component", "Imaginary component"])
-        self.Image1ComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        #self.Image1ComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.Layout_Image1 = QtWidgets.QGridLayout()
         self.Layout_Image1.addWidget(self.Image1Label,0,0)
         self.Layout_Image1.addWidget(self.Image1ComboBox,0,1)
@@ -41,7 +40,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Image2Label = QtWidgets.QLabel("Image 2")
         self.Image2ComboBox = QtWidgets.QComboBox()
         self.Image2ComboBox.addItems(["Magnitude", "Phase", "Real component", "Imaginary component"])
-        self.Image2ComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        #self.Image2ComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.Layout_Image2 = QtWidgets.QGridLayout()
         self.Layout_Image2.addWidget(self.Image2Label,0,0)
         self.Layout_Image2.addWidget(self.Image2ComboBox,0,1)
@@ -59,18 +58,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Output2 = QtWidgets.QVBoxLayout()
 
         self.Output1Label = QtWidgets.QLabel("Output 1")
+        self.Output1Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         self.Output2Label = QtWidgets.QLabel("Output 2")
+        self.Output2Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
 
-        self.Layout_Output1.addStretch(0)
         self.Layout_Output1.addWidget(self.Output1Label)
-        self.Layout_Output1.addStretch(1)
         self.Layout_Output1.addWidget(self.ImageDisplayList[4])
-        self.Layout_Output2.addStretch(0)
         self.Layout_Output2.addWidget(self.Output2Label)
-        self.Layout_Output2.addStretch(1)
         self.Layout_Output2.addWidget(self.ImageDisplayList[5])
 
-        #self.Layout_Controls
         self.Layout_1stMixer = QtWidgets.QHBoxLayout()
         self.MixerLabel = QtWidgets.QLabel("Mixer Output to:")
         self.OutputSelectorComboBox = QtWidgets.QComboBox()
@@ -119,10 +115,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.Layout_AllImages.addLayout(self.Layout_Image1, 0,0)
         self.Layout_AllImages.addLayout(self.Layout_Image2, 1,0)
-        self.Layout_AllImages.addLayout(self.Layout_Output1, 0,1)
-        self.Layout_AllImages.addLayout(self.Layout_Output2, 1,1)
-        self.Layout_AllImages.setColumnStretch(0,1)
+        #self.Layout_AllImages.addWidget(, 0,1)
+        #self.Layout_AllImages.addWidget(QtWidgets.QLayoutItem.spacerItem().changeSize(0, 5), 1,1)
+        self.Layout_AllImages.addLayout(self.Layout_Output1, 0,2)
+        self.Layout_AllImages.addLayout(self.Layout_Output2, 1,2)
+        self.Layout_AllImages.setColumnStretch(0,30)
         self.Layout_AllImages.setColumnStretch(1,1)
+        self.Layout_AllImages.setColumnStretch(2,20)
         self.Layout_AllImages.setRowStretch(0,2)
         self.Layout_AllImages.setRowStretch(1,2)
 
@@ -161,7 +160,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     FileName = FileName + path[i]
                 i=i+1
 
-            if path[i:] != ".png" and path[i:] != ".JPG" and path[i:] != ".jpg":
+            if path[i:] != ".png" and path[i:] != ".JPG" and path[i:] != ".jpg" and path[i:] != ".PNG":
                 self.DisplayError("ERROR", "File type must be an image (e.g. png or jpg)")
                 Imagepaths = self.open_dialog_box()
                 break
@@ -178,7 +177,33 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for path in Imagepaths:
             for i in x:
                 self.ImageDisplayList[i].setImage(path)
+                
+                #FOR GUI PREVIEW ONLY
+                if i==0:
+                    self.ImageDisplayList[4].setImage(path)
+                if i==2:
+                    self.ImageDisplayList[5].setImage(path)
             x = [2,3]
+        
+        """Uncomment this to display images without width hieght check"""
+        # for i in range(6):
+        #     self.ImageDisplayList[i].Display()
+
+        """Error is here"""
+        # if not self.SimilarSize():
+        #     self.DisplayError("SIZE ERROR", "The 2 images must have same size")
+        #     self.SelectFiles()
+        # else:
+        #     for i in range(6):
+        #         self.ImageDisplayList[i].Display()
+
+    def SimilarSize(self):        
+        if self.ImageDisplayList[0].height() != self.ImageDisplayList[2].height() or self.ImageDisplayList[0].width() != self.ImageDisplayList[2].width():
+            print("Width check: \nImage 1: ", self.ImageDisplayList[0].width(), "\nImage 2: ", self.ImageDisplayList[1].width(), "\n")
+            print("Height check: \nImage 1: ",self.ImageDisplayList[0].height(), "\nImage 2: ", self.ImageDisplayList[1].height(), "\n")
+            return False  
+        return True
+
         
 
         

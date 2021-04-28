@@ -9,6 +9,8 @@ class ImageDisplay(QWidget):
 
     def setImage(self, imagePath):
         self.Image.load(imagePath)
+
+    def Display(self):
         self.ImageDisplayer = QPixmap.fromImage(self.Image)
         self.update()
 
