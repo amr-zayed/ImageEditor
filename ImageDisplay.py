@@ -1,16 +1,19 @@
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtGui import QPixmap, QPainter, QImage
 class ImageDisplay(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent=parent)
-        self.Image = QPixmap()
+        self.Image = QImage()
+        self.ImageDisplayer = QPixmap()
 
-    def setPixmap(self, image):
-        self.Image = QPixmap.fromImage(image)
+
+    def setImage(self, imagePath):
+        self.Image.load(imagePath)
+        self.ImageDisplayer = QPixmap.fromImage(self.Image)
         self.update()
 
     def paintEvent(self, event):
-        if not self.Image.isNull():
+        if not self.ImageDisplayer.isNull():
             painter = QPainter(self)
             painter.setRenderHint(QPainter.SmoothPixmapTransform)
-            painter.drawPixmap(self.rect(), self.Image)
+            painter.drawPixmap(self.rect(), self.ImageDisplayer)
