@@ -51,15 +51,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Image2.addWidget(self.Image2ComboBox,0,1)
         
         self.ImagesSignalMapper.mapped.connect(self.ImageIndexChanged)
-        
-        for _ in range(6):
-            self.ImageDisplayList.append(ImageDisplay())
-
-        self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
-        self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
-        
-        self.Layout_Image2.addWidget(self.ImageDisplayList[2],1,0)
-        self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
 
         self.Layout_Output1 = QtWidgets.QVBoxLayout()
         self.Layout_Output2 = QtWidgets.QVBoxLayout()
@@ -70,11 +61,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Output2Label = QtWidgets.QLabel("Output 2")
         self.Output2Label.setFont(QFont('impact', 15))
         self.Output2Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-
-        self.Layout_Output1.addWidget(self.Output1Label)
-        self.Layout_Output1.addWidget(self.ImageDisplayList[4])
-        self.Layout_Output2.addWidget(self.Output2Label)
-        self.Layout_Output2.addWidget(self.ImageDisplayList[5])
 
         self.Layout_1stMixer = QtWidgets.QHBoxLayout()
         self.MixerLabel = QtWidgets.QLabel("Mixer output to:")
@@ -134,6 +120,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ComponentMapper.setMapping(self.Component2Slider, 5)
 
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
+
+        self.ImageDisplayList.append(ImageDisplay(0))
+        self.ImageDisplayList.append(ImageDisplay(self.Image1ComboBox.count()))
+        self.ImageDisplayList.append(ImageDisplay(0))
+        self.ImageDisplayList.append(ImageDisplay(self.Image2ComboBox.count()))
+        self.ImageDisplayList.append(ImageDisplay(self.Comp1TypeComboBox.count()))
+        self.ImageDisplayList.append(ImageDisplay(self.Comp2TypeComboBox.count()))
+
+        self.Layout_Output1.addWidget(self.Output1Label)
+        self.Layout_Output1.addWidget(self.ImageDisplayList[4])
+        self.Layout_Output2.addWidget(self.Output2Label)
+        self.Layout_Output2.addWidget(self.ImageDisplayList[5])
+
+        self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
+        self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
+        
+        self.Layout_Image2.addWidget(self.ImageDisplayList[2],1,0)
+        self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
 
         self.Layout_Controls.addLayout(self.Layout_1stMixer)
         self.Layout_Controls.addStretch(2)
