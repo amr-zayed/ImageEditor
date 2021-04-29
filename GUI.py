@@ -29,21 +29,28 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Main.setColumnStretch(0,4)
         self.Layout_Main.setColumnStretch(1,1)
 
+        self.ImagesSignalMapper = QtCore.QSignalMapper()
         self.Image1Label = QtWidgets.QLabel("Image 1")
+        self.Image1Label.setFont(QFont('impact', 15))
         self.Image1ComboBox = QtWidgets.QComboBox()
         self.Image1ComboBox.addItems(["Magnitude", "Phase", "Real component", "Imaginary component"])
-        #self.Image1ComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.Image1ComboBox.currentIndexChanged.connect(self.ImagesSignalMapper.map)
+        self.ImagesSignalMapper.setMapping(self.Image1ComboBox, 0)
         self.Layout_Image1 = QtWidgets.QGridLayout()
         self.Layout_Image1.addWidget(self.Image1Label,0,0)
         self.Layout_Image1.addWidget(self.Image1ComboBox,0,1)
 
         self.Image2Label = QtWidgets.QLabel("Image 2")
+        self.Image2Label.setFont(QFont('impact', 15))
         self.Image2ComboBox = QtWidgets.QComboBox()
         self.Image2ComboBox.addItems(["Magnitude", "Phase", "Real component", "Imaginary component"])
-        #self.Image2ComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.Image2ComboBox.currentIndexChanged.connect(self.ImagesSignalMapper.map)
+        self.ImagesSignalMapper.setMapping(self.Image2ComboBox, 1)
         self.Layout_Image2 = QtWidgets.QGridLayout()
         self.Layout_Image2.addWidget(self.Image2Label,0,0)
         self.Layout_Image2.addWidget(self.Image2ComboBox,0,1)
+        
+        self.ImagesSignalMapper.mapped.connect(self.ImageIndexChanged)
         
         for _ in range(6):
             self.ImageDisplayList.append(ImageDisplay())
@@ -58,8 +65,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Output2 = QtWidgets.QVBoxLayout()
 
         self.Output1Label = QtWidgets.QLabel("Output 1")
+        self.Output1Label.setFont(QFont('impact', 15))
         self.Output1Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         self.Output2Label = QtWidgets.QLabel("Output 2")
+        self.Output2Label.setFont(QFont('impact', 15))
         self.Output2Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
 
         self.Layout_Output1.addWidget(self.Output1Label)
@@ -68,64 +77,85 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Output2.addWidget(self.ImageDisplayList[5])
 
         self.Layout_1stMixer = QtWidgets.QHBoxLayout()
-        self.MixerLabel = QtWidgets.QLabel("Mixer Output to:")
+        self.MixerLabel = QtWidgets.QLabel("Mixer output to:")
+        self.MixerLabel.setFont(QFont('Helvetica [Cronyx]', 10))
         self.OutputSelectorComboBox = QtWidgets.QComboBox()
         self.OutputSelectorComboBox.addItems(["Output 1", "Output 2"])
+        self.OutputSelectorComboBox.currentIndexChanged.connect(lambda: self.MixerOuputChanged())
         self.OutputSelectorComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         self.Layout_1stMixer.addWidget(self.MixerLabel)
         self.Layout_1stMixer.addWidget(self.OutputSelectorComboBox)
 
+        self.ComponentMapper = QtCore.QSignalMapper()
+
         self.Layout_2ndMixer = QtWidgets.QHBoxLayout()
         self.component1Label = QtWidgets.QLabel("Component 1:")
+        self.component1Label.setFont(QFont('Helvetica [Cronyx]', 10))
         self.Comp1ImgSelectorComboBox = QtWidgets.QComboBox()
         self.Comp1ImgSelectorComboBox.addItems(["Image 1", "Image 2"])
-        self.Component1Slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.Comp1ImgSelectorComboBox.currentIndexChanged.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Comp1ImgSelectorComboBox, 0)
+        self.Comp1ImgSelectorComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         self.Layout_2ndMixer.addWidget(self.component1Label)
         self.Layout_2ndMixer.addWidget(self.Comp1ImgSelectorComboBox)
-        self.Layout_2ndMixer.addWidget(self.Component1Slider)
 
         self.Layout_3rdMixer = QtWidgets.QHBoxLayout()
         self.Comp1TypeComboBox = QtWidgets.QComboBox()
         self.Comp1TypeComboBox.addItems(["Magnitude", "Phase", "Real", "Imaginary", "uniform magnitude", "uniform phase"])
+        self.Comp1TypeComboBox.currentIndexChanged.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Comp1TypeComboBox, 1)
         self.Layout_3rdMixer.addWidget(self.Comp1TypeComboBox)
+
+        self.Component1Slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.Component1Slider.sliderReleased.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Component1Slider, 2)
         
         self.Layout_4thMixer = QtWidgets.QHBoxLayout()
         self.component2Label = QtWidgets.QLabel("Component 2:")
+        self.component2Label.setFont(QFont('Helvetica [Cronyx]', 10))
         self.Comp2ImgSelectorComboBox = QtWidgets.QComboBox()
+        self.Comp2ImgSelectorComboBox.currentIndexChanged.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Comp2ImgSelectorComboBox, 3)
         self.Comp2ImgSelectorComboBox.addItems(["Image 1", "Image 2"])
-        self.Component2Slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.Comp2ImgSelectorComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         self.Layout_4thMixer.addWidget(self.component2Label)
         self.Layout_4thMixer.addWidget(self.Comp2ImgSelectorComboBox)
+        self.Component2Slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self.Layout_4thMixer.addWidget(self.Component2Slider)
 
         self.Layout_5thMixer = QtWidgets.QHBoxLayout()
         self.Comp2TypeComboBox = QtWidgets.QComboBox()
+        self.Comp2TypeComboBox.currentIndexChanged.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Comp2TypeComboBox, 4)
         self.Comp2TypeComboBox.addItems(["Magnitude", "Phase", "Real", "Imaginary", "uniform magnitude", "uniform phase"])
         self.Layout_5thMixer.addWidget(self.Comp2TypeComboBox)
 
-        # self.Layout_Controls.addStretch(0)
+        self.Component2Slider.sliderReleased.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Component2Slider, 5)
+
+        self.ComponentMapper.mapped.connect(self.ComponentChanged)
+
         self.Layout_Controls.addLayout(self.Layout_1stMixer)
         self.Layout_Controls.addStretch(2)
         self.Layout_Controls.addLayout(self.Layout_2ndMixer)
         self.Layout_Controls.addLayout(self.Layout_3rdMixer)
+        self.Layout_Controls.addWidget(self.Component1Slider)
         self.Layout_Controls.addStretch(1)
         self.Layout_Controls.addLayout(self.Layout_4thMixer)
         self.Layout_Controls.addLayout(self.Layout_5thMixer)
+        self.Layout_Controls.addWidget(self.Component2Slider)
         self.Layout_Controls.addStretch(50)
 
         self.Layout_AllImages.addLayout(self.Layout_Image1, 0,0)
-        self.Layout_AllImages.addLayout(self.Layout_Image2, 1,0)
-        #self.Layout_AllImages.addWidget(, 0,1)
-        #self.Layout_AllImages.addWidget(QtWidgets.QLayoutItem.spacerItem().changeSize(0, 5), 1,1)
+        self.Layout_AllImages.addLayout(self.Layout_Image2, 2,0)
         self.Layout_AllImages.addLayout(self.Layout_Output1, 0,2)
-        self.Layout_AllImages.addLayout(self.Layout_Output2, 1,2)
+        self.Layout_AllImages.addLayout(self.Layout_Output2, 2,2)
         self.Layout_AllImages.setColumnStretch(0,30)
         self.Layout_AllImages.setColumnStretch(1,1)
         self.Layout_AllImages.setColumnStretch(2,20)
-        self.Layout_AllImages.setRowStretch(0,2)
-        self.Layout_AllImages.setRowStretch(1,2)
-
-
+        self.Layout_AllImages.setRowStretch(0,25)
+        self.Layout_AllImages.setRowStretch(1,1)
+        self.Layout_AllImages.setRowStretch(2, 25)
 
         #Creating A messagebox For errors
         self.MessageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, "Error", "Error")
@@ -184,26 +214,39 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 if i==2:
                     self.ImageDisplayList[5].setImage(path)
             x = [2,3]
-        
-        """Uncomment this to display images without width hieght check"""
-        # for i in range(6):
-        #     self.ImageDisplayList[i].Display()
 
-        """Error is here"""
-        # if not self.SimilarSize():
-        #     self.DisplayError("SIZE ERROR", "The 2 images must have same size")
-        #     self.SelectFiles()
-        # else:
-        #     for i in range(6):
-        #         self.ImageDisplayList[i].Display()
+        if not self.SimilarSize():
+            self.DisplayError("SIZE ERROR", "The 2 images must have same size")
+            self.SelectFiles()
+        else:
+            for i in range(6):
+                self.ImageDisplayList[i].Display()
 
     def SimilarSize(self):        
         if self.ImageDisplayList[0].height() != self.ImageDisplayList[2].height() or self.ImageDisplayList[0].width() != self.ImageDisplayList[2].width():
-            print("Width check: \nImage 1: ", self.ImageDisplayList[0].width(), "\nImage 2: ", self.ImageDisplayList[1].width(), "\n")
-            print("Height check: \nImage 1: ",self.ImageDisplayList[0].height(), "\nImage 2: ", self.ImageDisplayList[1].height(), "\n")
             return False  
         return True
 
+    def ImageIndexChanged(self, index):
+        if index == 0:
+            print("Image 1 type", self.Image1ComboBox.currentIndex())
         
+        if index == 1:
+            print("Image 2 type", self.Image2ComboBox.currentIndex())
 
-        
+    def MixerOuputChanged(self):
+        print("Output ", self.OutputSelectorComboBox.currentIndex()+1)
+
+    def ComponentChanged(self, index):
+        if index ==0:
+            print("Component 1 image", self.OutputSelectorComboBox.currentIndex()+1)
+        elif index ==1:
+            print("Component 1 type", self.Comp1TypeComboBox.currentIndex())
+        elif index ==2:
+            print("Component 1 slider value:", self.Component1Slider.value()+1)
+        elif index ==3:
+            print("Component 2 image", self.OutputSelectorComboBox.currentIndex()+1)
+        elif index ==4:
+            print("Component 2 type", self.Comp2TypeComboBox.currentIndex())
+        elif index ==5:
+            print("Component 2 slider value:", self.Component2Slider.value()+1)
