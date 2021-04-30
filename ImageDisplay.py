@@ -7,8 +7,6 @@ class ImageDisplay(QWidget):
         QWidget.__init__(self, parent=parent)
         self.Image = Image(count)
         self.ImageDisplayer = QPixmap()
-        self.RGBArray = []
-
 
     def setImage(self, imagePath):
         self.Image.SetInitialImage(imagePath)

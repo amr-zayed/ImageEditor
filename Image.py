@@ -10,7 +10,7 @@ class Image(QWidget):
         self.MainImage = QImage()
         self.ImageList = []
         for _ in range(count):
-            self.ImageList.append(QImage)
+            self.ImageList.append(QImage())
         self.PixelsList = []
 
     def SetInitialImage(self,path):

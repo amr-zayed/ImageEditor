@@ -24,12 +24,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ControlsColor.setStyleSheet("background-color:#d9d9d9;")
         self.Layout_Main = QtWidgets.QGridLayout(self.main_widget)
         self.Layout_Main.addLayout(self.Layout_AllImages,0,0)
-        self.Layout_Main.addWidget(self.ControlsColor,0,1)
         self.Layout_Main.addLayout(self.Layout_Controls,0,1)
+        self.Layout_Main.addWidget(self.ControlsColor,0,1)
         self.Layout_Main.setColumnStretch(0,4)
         self.Layout_Main.setColumnStretch(1,1)
 
         self.ImagesSignalMapper = QtCore.QSignalMapper()
+
         self.Image1Label = QtWidgets.QLabel("Image 1")
         self.Image1Label.setFont(QFont('impact', 15))
         self.Image1ComboBox = QtWidgets.QComboBox()
@@ -58,6 +59,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Output1Label = QtWidgets.QLabel("Output 1")
         self.Output1Label.setFont(QFont('impact', 15))
         self.Output1Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        
         self.Output2Label = QtWidgets.QLabel("Output 2")
         self.Output2Label.setFont(QFont('impact', 15))
         self.Output2Label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
@@ -106,8 +108,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Comp2ImgSelectorComboBox.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         self.Layout_4thMixer.addWidget(self.component2Label)
         self.Layout_4thMixer.addWidget(self.Comp2ImgSelectorComboBox)
+
         self.Component2Slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.Layout_4thMixer.addWidget(self.Component2Slider)
+        self.Component2Slider.sliderReleased.connect(self.ComponentMapper.map)
+        self.ComponentMapper.setMapping(self.Component2Slider, 5)
 
         self.Layout_5thMixer = QtWidgets.QHBoxLayout()
         self.Comp2TypeComboBox = QtWidgets.QComboBox()
@@ -115,9 +119,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ComponentMapper.setMapping(self.Comp2TypeComboBox, 4)
         self.Comp2TypeComboBox.addItems(["Magnitude", "Phase", "Real", "Imaginary", "uniform magnitude", "uniform phase"])
         self.Layout_5thMixer.addWidget(self.Comp2TypeComboBox)
-
-        self.Component2Slider.sliderReleased.connect(self.ComponentMapper.map)
-        self.ComponentMapper.setMapping(self.Component2Slider, 5)
 
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
 
@@ -157,9 +158,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_AllImages.setColumnStretch(0,30)
         self.Layout_AllImages.setColumnStretch(1,1)
         self.Layout_AllImages.setColumnStretch(2,20)
-        self.Layout_AllImages.setRowStretch(0,25)
+        self.Layout_AllImages.setRowStretch(0,30)
         self.Layout_AllImages.setRowStretch(1,1)
-        self.Layout_AllImages.setRowStretch(2, 25)
+        self.Layout_AllImages.setRowStretch(2, 30)
 
         #Creating A messagebox For errors
         self.MessageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, "Error", "Error")
@@ -239,7 +240,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             print("Image 2 type", self.Image2ComboBox.currentIndex())
 
     def MixerOuputChanged(self):
-        print("Output ", self.OutputSelectorComboBox.currentIndex()+1)
+        print("Output", self.OutputSelectorComboBox.currentIndex()+1)
 
     def ComponentChanged(self, index):
         if index ==0:
