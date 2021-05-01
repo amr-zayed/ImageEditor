@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QPixmap
 import numpy as np
 from numpy import asarray 
 from PIL.Image import open
+from PIL.Image import fromarray
+from PIL.ImageQt import ImageQt
 from PIL import Image as mg
 import cv2
 from matplotlib import pyplot as plt
@@ -13,9 +15,13 @@ class ImageOutput(QWidget):
         self.MainImage = QImage()
         self.PathsList=[]
         self.Magnitude=[[],[]]
+        self.MagnitudeImage = []
         self.Phase=[[],[]]
+        self.PhaseImage = []
         self.Real=[[],[]]
-        self.Imag=[[],[]]
+        self.RealImage = []
+        self.Imaginary=[[],[]]
+        self.ImaginaryImage = []
         self.MainOutputImage = QImage()
         self.OutputComp1ImageList = []
         self.OutputComp2ImageList = []
@@ -39,7 +45,6 @@ class ImageOutput(QWidget):
     
     def SetImagePathsList(self,List):
         self.PathsList=List
-        print(self.PathsList)
         
     def FT(self):
         img=[0]*2
@@ -55,8 +60,24 @@ class ImageOutput(QWidget):
             self.Phase[i]=phase_spectrum
             self.Magnitude[i]=magnitude_spectrum
             self.Real[i] = dft_shift.real
-            self.Imag[i] = dft_shift.imag
-            print(type(self.Magnitude[i]))
+            self.Imaginary[i] = dft_shift.imag
+            
+            RGBimg = fromarray(self.Magnitude[i], 'RGB')
+            Qimag = QPixmap.fromImage(ImageQt(RGBimg))
+            self.MagnitudeImage.append(Qimag)
+            
+            RGBimg = fromarray(self.Phase[i], 'RGB')
+            Qimag = QPixmap.fromImage(ImageQt(RGBimg))
+            self.PhaseImage.append(Qimag)
+
+            RGBimg = fromarray(self.Imaginary[i], 'RGB')
+            Qimag = QPixmap.fromImage(ImageQt(RGBimg))
+            self.ImaginaryImage.append(Qimag)
+
+            RGBimg = fromarray(self.Real[i], 'RGB')
+            Qimag = QPixmap.fromImage(ImageQt(RGBimg))
+            self.RealImage.append(Qimag)
+
             #fft_img_mod = np.fft.ifftshift(dft_shift)
             # img_mod = np.fft.ifft2(self.Magnitude[i])
             # img_mod = np.abs(img_mod)
