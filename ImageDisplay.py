@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPixmap, QPainter, QImage, QColor
 from Image import Image 
+from OutputImage import ImageOutput
 
 class ImageDisplay(QWidget):
     def __init__(self, count, parent=None):
@@ -10,6 +11,7 @@ class ImageDisplay(QWidget):
 
     def setImage(self, imagePath):
         self.Image.SetInitialImage(imagePath)
+        
 
     def Display(self):
         self.ImageDisplayer = QPixmap.fromImage(self.Image.GetMainImage())
@@ -26,4 +28,7 @@ class ImageDisplay(QWidget):
     
     def width(self):
         return self.Image.width()
+    
+    def ft(self):
+        self.Image.FtImage()
 

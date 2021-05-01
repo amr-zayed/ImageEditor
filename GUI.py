@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
+from OutputImage import ImageOutput
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -11,6 +12,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.main_widget = QtWidgets.QWidget(self)
         
         self.ImageDisplayList = []
+        self.OutputImagesPaths=[]
+        self.OutputPaths=ImageOutput()
         
         #Adding File in menubar
         self.file_menu = QtWidgets.QMenu('File', self)
@@ -212,14 +215,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         for path in Imagepaths:
             for i in x:
                 self.ImageDisplayList[i].setImage(path)
-                
+                if i==0 or i==2:
+                    self.OutputImagesPaths.append(path)
                 #FOR GUI PREVIEW ONLY
-                if i==0:
-                    self.ImageDisplayList[4].setImage(path)
+                '''if i==0:
+                   # self.ImageDisplayList[4].setImage(path)
                 if i==2:
-                    self.ImageDisplayList[5].setImage(path)
-            x = [2,3]
 
+                    self.ImageDisplayList[5].setImage(path)'''
+            x = [2,3]
+        self.OutputPaths.SetImagePathsList(self.OutputImagesPaths)
+
+        #print(self.OutputImagesPaths)
+        #print(len(self.OutputImagesPaths))
         if not self.SimilarSize():
             self.DisplayError("SIZE ERROR", "The 2 images must have same size")
             self.SelectFiles()
@@ -235,6 +243,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def ImageIndexChanged(self, index):
         if index == 0:
             print("Image 1 type", self.Image1ComboBox.currentIndex())
+            if self.Image1ComboBox.currentIndex()==1:
+                self.OutputPaths.FT()
+            
         
         if index == 1:
             print("Image 2 type", self.Image2ComboBox.currentIndex())
