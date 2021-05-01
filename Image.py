@@ -17,11 +17,9 @@ class Image(QWidget):
 
     def SetInitialImage(self,path):
         self.MainImage.load(path)
-        image = open(path)
-        self.PixelsList.append(asarray(image))
-        for i in range(1,self.count):
-            self.PixelsList.append(self.PixelsList[0].copy())
-
+        if self.count !=0:
+            image=open(path)
+            self.PixelsList=asarray(image)
 
     def GetMainImage(self):
         return self.MainImage

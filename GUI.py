@@ -241,10 +241,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         return True
 
     def ImageIndexChanged(self, index):
+        self.OutputPaths.FT()
+
         if index == 0:
             print("Image 1 type", self.Image1ComboBox.currentIndex())
-            if self.Image1ComboBox.currentIndex()==1:
-                self.OutputPaths.FT()
             
         
         if index == 1:
