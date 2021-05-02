@@ -230,6 +230,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def ImageIndexChanged(self, index):
         if index == 0:
             print("Image 1 type", self.Image1ComboBox.currentIndex())
+            self.ImageDisplayList[1].SetMainImage(self.Image1ComboBox.currentIndex())
         if index == 1:
             print("Image 2 type", self.Image2ComboBox.currentIndex())
 

@@ -3,7 +3,7 @@ from PyQt5.QtGui import QPixmap, QPainter, QImage, QColor
 from Image import Image
 
 """Make sure to uncomment this"""
-#from Mixer import Mixer
+from Mixer import Mixer
 
 class ImageDisplay(QWidget):
     def __init__(self, Mood, count, parent=None):
@@ -18,14 +18,18 @@ class ImageDisplay(QWidget):
         if self.IsImage:
             self.Image = Image(imagePath, self.Count)
         else:
-            pass #Make sure to remove this line
+            #pass #Make sure to remove this line
 
             """imagePath is a list of 2 paths...Class images takes only string in initialization"""
-            #self.ImageMixer = Mixer(imagePath) 
-        
+            #self.ImageMixer = Mixer(imagePath, self.Count) 
+    def SetMainImage(self,index):
+        self.ImageDisplayer=self.Image.GetComponentQpixMap(index)
+
 
     def Display(self):
         if self.IsImage:
+            self.Image.SetFourierLists()
+            self.Image.SetFourierQpixmapLists()
             self.ImageDisplayer = self.Image.GetMainImage()
             self.update()
         else:
