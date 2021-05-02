@@ -6,6 +6,7 @@ from PIL.Image import open
 from Fourier import FT
 from PIL.Image import fromarray
 from PIL.ImageQt import ImageQt
+from matplotlib import pyplot as plt
   
 
 
@@ -59,6 +60,9 @@ class Image(QWidget):
             return    
 
         for Component in self.FourierLists:
+            # plt.subplot(121),plt.imshow(Component)
+            # plt.title('Input Image'), plt.xticks([]), plt.yticks([])
+            # plt.show()
             RGBimg=fromarray(Component,'RGB')
             Qimg=QPixmap.fromImage(ImageQt(RGBimg))
             self.FourierQpixmapLists.append(Qimg)

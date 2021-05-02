@@ -24,6 +24,7 @@ class ImageDisplay(QWidget):
             #self.ImageMixer = Mixer(imagePath, self.Count) 
     def SetMainImage(self,index):
         self.ImageDisplayer=self.Image.GetComponentQpixMap(index)
+        self.update()
 
 
     def Display(self):
