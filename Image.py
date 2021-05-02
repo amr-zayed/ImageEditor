@@ -1,29 +1,33 @@
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QPixmap
 from numpy import asarray 
 from PIL.Image import open
-import cv2
-from matplotlib import pyplot as plt
 
 class Image(QWidget):
-    def __init__(self, count, parent=None):
+    def __init__(self, path, count, parent=None):
         QWidget.__init__(self, parent=parent)
-        self.count = count
-        self.MainImage = QImage()
-        self.ImageList = []
-        for _ in range(count):
-            self.ImageList.append(QImage())
-        self.PixelsList = []
+        self.Path = path
+        self.Count = count
+        
+        self.MainImage = QPixmap()
+        self.MainImage.load(self.Path)
+        
+        self.FourierLists = []
+        self.FourierQpixmapLists = []
 
-    def SetInitialImage(self,path):
-        self.MainImage.load(path)
-        if self.count !=0:
-            image=open(path)
-            self.PixelsList=asarray(image)
+        for i in range(count):
+            if i == 0:
+                self.FourierLists.append(asarray(open(self.Path)))
+            else:
+                self.FourierLists.append(self.FourierLists[0].copy())
+            self.FourierQpixmapLists.append(QPixmap())
 
     def GetMainImage(self):
         return self.MainImage
     
+    def SetMainImage(sefl, index):
+        self.MainImage = self.FourierQpixmapLists[index]
+        
     def height(self):
         return self.MainImage.height()
     
@@ -32,21 +36,3 @@ class Image(QWidget):
     
     def GetImageList(self):
         return self.ImageList
-    
-    def GetPixelsList(self):
-        return self.PixelsList
-
-    # def FtImage(self):
-    #     img=cv2.imread('input.png')
-    #     img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    #     dft = asarray.fft.fft2(img)
-    #     dft_shift = asarray.fft.fftshift(dft)
-    #     phase_spectrum = asarray.angle(dft_shift)
-
-    #     ax1 = plt.subplot(1,2,1)
-    #     ax1.imshow(img, cmap='gray')
-
-    #     ax2 = plt.subplot(1,2,2)
-    #     ax2.imshow(phase_spectrum, cmap='gray')
-
-    #     plt.show()
