@@ -16,16 +16,18 @@ class Image(QWidget):
         self.Path = path
         self.Count = count
         
-        self.MainImage = QPixmap()
-        self.MainImage.load(self.Path)
-        
+        # self.MainImage = QPixmap()
+        # self.MainImage.load(self.Path)
+
+        self.Greysscale = open(self.Path).convert('L')
+        self.MainImage = QPixmap.fromImage(ImageQt(self.Greysscale))
+
         self.FourierLists = []
         self.FourierQpixmapLists = []
-        print(count)
 
         for i in range(count):
             if i == 0:
-                self.FourierLists.append(asarray(open(self.Path)))
+                self.FourierLists.append(asarray(self.Greysscale))
             else:
                 self.FourierLists.append(self.FourierLists[0].copy())
 
@@ -51,18 +53,13 @@ class Image(QWidget):
     
         if self.Count==4:
             isFour=True
-            
-
-        self.FourierLists=FT(open(self.Path),isFour)
+        self.FourierLists=FT(self.Greysscale,isFour)
 
     def SetFourierQpixmapLists(self):
         if self.Count==0:
             return    
 
         for Component in self.FourierLists:
-            # plt.subplot(121),plt.imshow(Component)
-            # plt.title('Input Image'), plt.xticks([]), plt.yticks([])
-            # plt.show()
             RGBimg=fromarray(Component,'RGB')
             Qimg=QPixmap.fromImage(ImageQt(RGBimg))
             self.FourierQpixmapLists.append(Qimg)

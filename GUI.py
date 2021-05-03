@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
+from FourierDisplayer import MplCanvas
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -28,6 +29,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Main.addWidget(self.ControlsColor,0,1)
         self.Layout_Main.setColumnStretch(0,4)
         self.Layout_Main.setColumnStretch(1,1)
+        self.Layout_Main.setContentsMargins(0, 0, 0, 0)
 
         self.ImagesSignalMapper = QtCore.QSignalMapper()
 
@@ -135,10 +137,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Output2.addWidget(self.ImageDisplayList[5])
 
         self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
-        self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
         
         self.Layout_Image2.addWidget(self.ImageDisplayList[2],1,0)
-        self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
 
         self.Layout_Controls.addLayout(self.Layout_1stMixer)
         self.Layout_Controls.addStretch(2)
@@ -209,16 +209,22 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
 
         self.ImageDisplayList[0].SetPath(Imagepaths[0])
-        self.ImageDisplayList[1].SetPath(Imagepaths[0])
         self.ImageDisplayList[2].SetPath(Imagepaths[1])
-        self.ImageDisplayList[3].SetPath(Imagepaths[1])
-        self.ImageDisplayList[4].SetPath(Imagepaths)
-        self.ImageDisplayList[5].SetPath(Imagepaths)
 
         if not self.SimilarSize():
             self.DisplayError("SIZE ERROR", "The 2 images must have same size")
             self.SelectFiles()
         else:
+            self.ImageDisplayList[1] = MplCanvas(Imagepaths[0], 4)
+            self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
+            self.Layout_Image1.setColumnStretch(0,1)
+            self.Layout_Image1.setColumnStretch(1,1)
+            self.ImageDisplayList[3] = MplCanvas(Imagepaths[1], 4)
+            self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
+            self.Layout_Image2.setColumnStretch(0,1)
+            self.Layout_Image2.setColumnStretch(1,1)
+            self.ImageDisplayList[4].SetPath(Imagepaths)
+            self.ImageDisplayList[5].SetPath(Imagepaths)
             for i in range(6):
                 self.ImageDisplayList[i].Display()
 
@@ -229,10 +235,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
     def ImageIndexChanged(self, index):
         if index == 0:
-            print("Image 1 type", self.Image1ComboBox.currentIndex())
-            self.ImageDisplayList[1].SetMainImage(self.Image1ComboBox.currentIndex())
+            self.ImageDisplayList[1].SetGraphData(self.Image1ComboBox.currentIndex())
         if index == 1:
-            print("Image 2 type", self.Image2ComboBox.currentIndex())
+            self.ImageDisplayList[3].SetGraphData(self.Image2ComboBox.currentIndex())
 
     def MixerOuputChanged(self):
         print("Output", self.OutputSelectorComboBox.currentIndex()+1)
