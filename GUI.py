@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
 from FourierDisplayer import MplCanvas
+from Mixer import MixerDisplayer
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -124,17 +125,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
 
-        self.ImageDisplayList.append(ImageDisplay(True, 0))
-        self.ImageDisplayList.append(ImageDisplay(True, self.Image1ComboBox.count()))
-        self.ImageDisplayList.append(ImageDisplay(True, 0))
-        self.ImageDisplayList.append(ImageDisplay(True, self.Image2ComboBox.count()))
-        self.ImageDisplayList.append(ImageDisplay(False, self.Comp1TypeComboBox.count()))
-        self.ImageDisplayList.append(ImageDisplay(False, self.Comp2TypeComboBox.count()))
+        self.ImageDisplayList.append(ImageDisplay())
+        self.ImageDisplayList.append(ImageDisplay())
+        self.ImageDisplayList.append(ImageDisplay())
+        self.ImageDisplayList.append(ImageDisplay())
+        self.ImageDisplayList.append(ImageDisplay())
+        self.ImageDisplayList.append(ImageDisplay())
 
         self.Layout_Output1.addWidget(self.Output1Label)
-        self.Layout_Output1.addWidget(self.ImageDisplayList[4])
+        #self.Layout_Output1.addWidget(self.ImageDisplayList[4])
         self.Layout_Output2.addWidget(self.Output2Label)
-        self.Layout_Output2.addWidget(self.ImageDisplayList[5])
+        #self.Layout_Output2.addWidget(self.ImageDisplayList[5])
 
         self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
         
@@ -151,16 +152,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Controls.addWidget(self.Component2Slider)
         self.Layout_Controls.addStretch(50)
 
-        self.Layout_AllImages.addLayout(self.Layout_Image1, 0,0)
-        self.Layout_AllImages.addLayout(self.Layout_Image2, 2,0)
-        self.Layout_AllImages.addLayout(self.Layout_Output1, 0,2)
-        self.Layout_AllImages.addLayout(self.Layout_Output2, 2,2)
-        self.Layout_AllImages.setColumnStretch(0,30)
-        self.Layout_AllImages.setColumnStretch(1,1)
-        self.Layout_AllImages.setColumnStretch(2,20)
-        self.Layout_AllImages.setRowStretch(0,30)
-        self.Layout_AllImages.setRowStretch(1,1)
-        self.Layout_AllImages.setRowStretch(2, 30)
+        self.Layout_AllImages.addLayout(self.Layout_Image1, 1,1)
+        self.Layout_AllImages.addLayout(self.Layout_Image2, 3,1)
+        self.Layout_AllImages.addLayout(self.Layout_Output1, 1,3)
+        self.Layout_AllImages.addLayout(self.Layout_Output2, 3,3)
+        self.Layout_AllImages.setColumnStretch(0,1)
+        self.Layout_AllImages.setColumnStretch(1,30)
+        self.Layout_AllImages.setColumnStretch(2,1)
+        self.Layout_AllImages.setColumnStretch(3,20)
+        self.Layout_AllImages.setRowStretch(0,1)
+        self.Layout_AllImages.setRowStretch(1,30)
+        self.Layout_AllImages.setRowStretch(2,1)
+        self.Layout_AllImages.setRowStretch(3, 30)
 
         #Creating A messagebox For errors
         self.MessageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, "Error", "Error")
@@ -168,6 +171,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
         self.resize(1280,720)
+
+        self.OutputIndex = 4
 
     def fileQuit(self):
         self.close()
@@ -223,8 +228,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
             self.Layout_Image2.setColumnStretch(0,1)
             self.Layout_Image2.setColumnStretch(1,1)
-            self.ImageDisplayList[4].SetPath(Imagepaths)
-            self.ImageDisplayList[5].SetPath(Imagepaths)
+
+            self.ImageDisplayList[4] = MixerDisplayer(Imagepaths, 6)
+            self.ImageDisplayList[5] = MixerDisplayer(Imagepaths, 6)
+            self.Layout_Output1.addWidget(self.ImageDisplayList[4])
+            self.Layout_Output2.addWidget(self.ImageDisplayList[5])
+
             for i in range(6):
                 self.ImageDisplayList[i].Display()
 
@@ -240,18 +249,34 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ImageDisplayList[3].SetGraphData(self.Image2ComboBox.currentIndex())
 
     def MixerOuputChanged(self):
-        print("Output", self.OutputSelectorComboBox.currentIndex()+1)
+        self.OutputIndex = self.OutputSelectorComboBox.currentIndex()+4 
 
     def ComponentChanged(self, index):
-        if index ==0:
-            print("Component 1 image", self.OutputSelectorComboBox.currentIndex()+1)
+        print("Output ", self.OutputIndex,":")
+        self.ImageDisplayList[self.OutputIndex].SetMixingVariables(slider1=self.Component1Slider.value(),
+        slider2=self.Component2Slider.value(),
+        comp1=self.Comp1TypeComboBox.currentIndex(),
+        comp2=self.Comp2TypeComboBox.currentIndex(),
+        comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
+        comp2img=self.Comp2ImgSelectorComboBox.currentIndex())
+
+        """elif self.OutputSelectorComboBox.currentIndex() ==1:
+            self.ImageDisplayList[5].SetMainImage(slider1=self.Component1Slider.value(),
+            slider2=self.Component2Slider.value(),
+            comp1=self.Comp1TypeComboBox.currentIndex(),
+            comp2=self.Comp2TypeComboBox.currentIndex(),
+            comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
+            comp2img=self.Comp2ImgSelectorComboBox.currentIndex())"""
+        
+        """if index ==0:
+            print("Component 1 image", self.Comp1ImgSelectorComboBox.currentIndex()+1)
         elif index ==1:
             print("Component 1 type", self.Comp1TypeComboBox.currentIndex())
         elif index ==2:
             print("Component 1 slider value:", self.Component1Slider.value()+1)
         elif index ==3:
-            print("Component 2 image", self.OutputSelectorComboBox.currentIndex()+1)
+            print("Component 2 image", self.Comp2ImgSelectorComboBox.currentIndex()+1)
         elif index ==4:
             print("Component 2 type", self.Comp2TypeComboBox.currentIndex())
         elif index ==5:
-            print("Component 2 slider value:", self.Component2Slider.value()+1)
+            print("Component 2 slider value:", self.Component2Slider.value()+1)"""

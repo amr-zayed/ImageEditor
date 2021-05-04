@@ -11,20 +11,15 @@ from matplotlib import pyplot as plt
 
 
 class Image(QWidget):
-    def __init__(self, path, count, parent=None):
+    def __init__(self, path, count=0, parent=None):
         QWidget.__init__(self, parent=parent)
         self.Path = path
         self.Count = count
-        
-        # self.MainImage = QPixmap()
-        # self.MainImage.load(self.Path)
 
         self.Greysscale = open(self.Path).convert('L')
         self.MainImage = QPixmap.fromImage(ImageQt(self.Greysscale))
-
         self.FourierLists = []
-        self.FourierQpixmapLists = []
-
+        #self.FourierQpixmapLists = []
         for i in range(count):
             if i == 0:
                 self.FourierLists.append(asarray(self.Greysscale))
@@ -33,12 +28,6 @@ class Image(QWidget):
 
     def GetMainImage(self):
         return self.MainImage
-    
-    def SetMainImage(self, index):
-        self.MainImage = self.FourierQpixmapLists[index]
-    
-    def GetComponentQpixMap(self,index):
-        return self.FourierQpixmapLists[index]
 
     def height(self):
         return self.MainImage.height()
@@ -49,23 +38,10 @@ class Image(QWidget):
     def SetFourierLists(self):
         isFour=False
         if self.Count==0:
-            return    
-    
+            return
         if self.Count==4:
             isFour=True
         self.FourierLists=FT(self.Greysscale,isFour)
-
-    def SetFourierQpixmapLists(self):
-        if self.Count==0:
-            return    
-
-        for Component in self.FourierLists:
-            RGBimg=fromarray(Component,'RGB')
-            Qimg=QPixmap.fromImage(ImageQt(RGBimg))
-            self.FourierQpixmapLists.append(Qimg)
-        print(self.FourierQpixmapLists)
-        print(len(self.FourierQpixmapLists))
-        
 
 
 
