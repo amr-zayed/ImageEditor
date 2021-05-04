@@ -7,10 +7,10 @@ def FT(img,isfour):
     magnitudeSpectrum = 20*np.log(np.abs(dft_shift))
     Real = dft_shift.real
     Imag = dft_shift.imag
-    img_mod_Phase = np.abs(np.fft.ifft2(phaseSpectrum))
-    img_mod_magnitude= np.abs(np.fft.ifft2(magnitudeSpectrum))
-    img_mod_Real= np.abs(np.fft.ifft2(Real))
-    img_mod_Imag= np.abs(np.fft.ifft2(Imag))
+    img_mod_Phase = phaseSpectrum
+    img_mod_magnitude= magnitudeSpectrum
+    img_mod_Real= Real
+    img_mod_Imag= Imag
     if isfour==True:
         ComponentsList=[img_mod_magnitude,img_mod_Phase,img_mod_Real,img_mod_Imag]
     else:

@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPixmap
 from numpy import asarray 
 from PIL.Image import open
 from Fourier import FT
+import cv2
 from PIL.ImageQt import ImageQt
   
 
@@ -12,7 +13,6 @@ class Image(QWidget):
         QWidget.__init__(self, parent=parent)
         self.Path = path
         self.Count = count
-
         self.Greysscale = open(self.Path).convert('L')
         self.MainImage = QPixmap.fromImage(ImageQt(self.Greysscale))
         self.FourierLists = []
