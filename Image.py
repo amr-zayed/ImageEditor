@@ -1,12 +1,9 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPixmap
-import numpy
 from numpy import asarray 
 from PIL.Image import open
 from Fourier import FT
-from PIL.Image import fromarray
 from PIL.ImageQt import ImageQt
-from matplotlib import pyplot as plt
   
 
 
@@ -19,7 +16,6 @@ class Image(QWidget):
         self.Greysscale = open(self.Path).convert('L')
         self.MainImage = QPixmap.fromImage(ImageQt(self.Greysscale))
         self.FourierLists = []
-        #self.FourierQpixmapLists = []
         for i in range(count):
             if i == 0:
                 self.FourierLists.append(asarray(self.Greysscale))

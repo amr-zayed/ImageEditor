@@ -56,8 +56,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
         self.ImagesSignalMapper.mapped.connect(self.ImageIndexChanged)
 
-        self.Layout_Output1 = QtWidgets.QVBoxLayout()
-        self.Layout_Output2 = QtWidgets.QVBoxLayout()
+        self.Layout_Output1 = QtWidgets.QGridLayout()
+        self.Layout_Output2 = QtWidgets.QGridLayout()
 
         self.Output1Label = QtWidgets.QLabel("Output 1")
         self.Output1Label.setFont(QFont('impact', 15))
@@ -132,14 +132,17 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ImageDisplayList.append(ImageDisplay())
         self.ImageDisplayList.append(ImageDisplay())
 
-        self.Layout_Output1.addWidget(self.Output1Label)
-        #self.Layout_Output1.addWidget(self.ImageDisplayList[4])
-        self.Layout_Output2.addWidget(self.Output2Label)
-        #self.Layout_Output2.addWidget(self.ImageDisplayList[5])
+        self.Layout_Output1.addWidget(self.Output1Label, 0,0)
+        self.Layout_Output1.setRowStretch(0,1)
+        self.Layout_Output1.setRowStretch(1,30)
+        self.Layout_Output2.addWidget(self.Output2Label, 0,0)
+        self.Layout_Output2.setRowStretch(0,1)
+        self.Layout_Output2.setRowStretch(1,30)
 
         self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
-        
+        self.Layout_Image1.setRowStretch(1,30)
         self.Layout_Image2.addWidget(self.ImageDisplayList[2],1,0)
+        self.Layout_Image2.setRowStretch(1,30)
 
         self.Layout_Controls.addLayout(self.Layout_1stMixer)
         self.Layout_Controls.addStretch(2)
@@ -186,7 +189,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         filename = QtWidgets.QFileDialog.getOpenFileNames()
         Imagepaths = filename[0]
         while len(Imagepaths)!=2 and len(Imagepaths)!=0:
-            self.DisplayError("ERROR", "you should select exactly 2 images")
+            self.DisplayError("SELECTION ERROR", "you should select exactly 2 images")
             filename = QtWidgets.QFileDialog.getOpenFileNames()
             Imagepaths = filename[0]
     
@@ -201,7 +204,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 i=i+1
 
             if path[i:] != ".png" and path[i:] != ".JPG" and path[i:] != ".jpg" and path[i:] != ".PNG":
-                self.DisplayError("ERROR", "File type must be an image (e.g. png or jpg)")
+                self.DisplayError("FILE TYPEERROR", "File type must be an image (e.g. png or jpg)")
                 Imagepaths = self.open_dialog_box()
                 break
             
@@ -231,8 +234,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
             self.ImageDisplayList[4] = MixerDisplayer(Imagepaths, 6)
             self.ImageDisplayList[5] = MixerDisplayer(Imagepaths, 6)
-            self.Layout_Output1.addWidget(self.ImageDisplayList[4])
-            self.Layout_Output2.addWidget(self.ImageDisplayList[5])
+            self.Layout_Output1.addWidget(self.ImageDisplayList[4],1,0)
+            self.Layout_Output2.addWidget(self.ImageDisplayList[5],1,0)
 
             for i in range(6):
                 self.ImageDisplayList[i].Display()
@@ -252,31 +255,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.OutputIndex = self.OutputSelectorComboBox.currentIndex()+4 
 
     def ComponentChanged(self, index):
-        print("Output ", self.OutputIndex,":")
         self.ImageDisplayList[self.OutputIndex].SetMixingVariables(slider1=self.Component1Slider.value(),
         slider2=self.Component2Slider.value(),
         comp1=self.Comp1TypeComboBox.currentIndex(),
         comp2=self.Comp2TypeComboBox.currentIndex(),
         comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
         comp2img=self.Comp2ImgSelectorComboBox.currentIndex())
-
-        """elif self.OutputSelectorComboBox.currentIndex() ==1:
-            self.ImageDisplayList[5].SetMainImage(slider1=self.Component1Slider.value(),
-            slider2=self.Component2Slider.value(),
-            comp1=self.Comp1TypeComboBox.currentIndex(),
-            comp2=self.Comp2TypeComboBox.currentIndex(),
-            comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
-            comp2img=self.Comp2ImgSelectorComboBox.currentIndex())"""
-        
-        """if index ==0:
-            print("Component 1 image", self.Comp1ImgSelectorComboBox.currentIndex()+1)
-        elif index ==1:
-            print("Component 1 type", self.Comp1TypeComboBox.currentIndex())
-        elif index ==2:
-            print("Component 1 slider value:", self.Component1Slider.value()+1)
-        elif index ==3:
-            print("Component 2 image", self.Comp2ImgSelectorComboBox.currentIndex()+1)
-        elif index ==4:
-            print("Component 2 type", self.Comp2TypeComboBox.currentIndex())
-        elif index ==5:
-            print("Component 2 slider value:", self.Component2Slider.value()+1)"""

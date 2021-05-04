@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPixmap, QPainter, QImage, QColor
+from PyQt5.QtGui import QPixmap, QPainter
 from Image import Image
 
 class ImageDisplay(QWidget):

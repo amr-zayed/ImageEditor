@@ -1,7 +1,3 @@
-import numpy as np
-
-from PyQt5 import QtWidgets
-from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from Image import Image

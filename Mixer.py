@@ -1,6 +1,3 @@
-from PyQt5.QtWidgets import QWidget
-import numpy as np
-from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from FourierDisplayer import MplCanvas
@@ -53,6 +50,5 @@ class MixerDisplayer(FigureCanvasQTAgg):
             comp2List = self.Image2.Image.FourierLists[self.Component2Type]
         
         self.MixedList = comp1List*(self.slider1/100) + comp2List*(self.slider2/100)
-        print(self.MixedList)
 
     
