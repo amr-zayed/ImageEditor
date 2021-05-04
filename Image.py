@@ -3,7 +3,6 @@ from PyQt5.QtGui import QPixmap
 from numpy import asarray 
 from PIL.Image import open
 from Fourier import FT
-import cv2
 from PIL.ImageQt import ImageQt
   
 
