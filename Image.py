@@ -12,7 +12,6 @@ class Image(QWidget):
         QWidget.__init__(self, parent=parent)
         self.Path = path
         self.Count = count
-
         self.Greysscale = open(self.Path).convert('L')
         self.MainImage = QPixmap.fromImage(ImageQt(self.Greysscale))
         self.FourierLists = []
