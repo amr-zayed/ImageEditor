@@ -1,5 +1,3 @@
-from PIL import Image as mg
-import cv2
 from matplotlib import pyplot as plt
 import numpy as np
 def FT(img,isfour):
