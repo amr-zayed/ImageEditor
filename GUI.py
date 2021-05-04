@@ -170,6 +170,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         #Creating A messagebox For errors
         self.MessageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, "Error", "Error")
+
+        #Disabling components
+        self.EnableComponents(False)
     
         self.main_widget.setFocus()
         self.setCentralWidget(self.main_widget)
@@ -223,6 +226,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.DisplayError("SIZE ERROR", "The 2 images must have same size")
             self.SelectFiles()
         else:
+            self.EnableComponents(True)
             self.ImageDisplayList[1] = MplCanvas(Imagepaths[0], 4)
             self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
             self.Layout_Image1.setColumnStretch(0,1)
@@ -261,3 +265,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         comp2=self.Comp2TypeComboBox.currentIndex(),
         comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
         comp2img=self.Comp2ImgSelectorComboBox.currentIndex())
+
+    def EnableComponents(self, bool):
+        self.Image1ComboBox.setEnabled(bool)
+        self.Image2ComboBox.setEnabled(bool)
+        self.Comp1TypeComboBox.setEnabled(bool)
+        self.Comp2TypeComboBox.setEnabled(bool)
+        self.Comp1ImgSelectorComboBox.setEnabled(bool)
+        self.Comp2ImgSelectorComboBox.setEnabled(bool)
+        self.OutputSelectorComboBox.setEnabled(bool)
+        self.Component1Slider.setEnabled(bool)
+        self.Component2Slider.setEnabled(bool)
