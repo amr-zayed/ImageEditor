@@ -3,6 +3,19 @@ from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
 from FourierDisplayer import MplCanvas
 from Mixer import MixerDisplayer
+import logging
+
+InfoLogger = logging.getLogger(__name__)
+InfoLogger.setLevel(logging.INFO)
+
+DebugLogger = logging.getLogger(__name__)
+DebugLogger.setLevel(logging.DEBUG)
+
+FileHandler = logging.FileHandler('ImageEditor.log')
+Formatter = logging.Formatter('%(levelname)s:%(filename)s:%(funcName)s:   %(message)s')
+FileHandler.setFormatter(Formatter)
+InfoLogger.addHandler(FileHandler)
+DebugLogger.addHandler(FileHandler)
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -179,11 +192,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.resize(1280,720)
 
         self.OutputIndex = 4
+        InfoLogger.info("GUI created")
 
     def fileQuit(self):
+        InfoLogger.info("App closed")
         self.close()
 
     def DisplayError(self, title, Message):
+        DebugLogger.debug('{}\n'.format(title))
         self.MessageBox.setWindowTitle(title)
         self.MessageBox.setText(Message)
         self.MessageBox.exec()
@@ -191,10 +207,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def open_dialog_box(self):
         filename = QtWidgets.QFileDialog.getOpenFileNames()
         Imagepaths = filename[0]
+        DebugLogger.debug('Number of images selected:{}'.format(len(Imagepaths)))
         while len(Imagepaths)!=2 and len(Imagepaths)!=0:
             self.DisplayError("SELECTION ERROR", "you should select exactly 2 images")
             filename = QtWidgets.QFileDialog.getOpenFileNames()
             Imagepaths = filename[0]
+            DebugLogger.debug('Number of images selected:{}'.format(len(Imagepaths)))
     
         for path in Imagepaths:
             i=0
@@ -205,9 +223,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 else:
                     FileName = FileName + path[i]
                 i=i+1
-
+            FileName = FileName + path[i:]
+            DebugLogger.debug('FileName:{}'.format(FileName))
             if path[i:] != ".png" and path[i:] != ".JPG" and path[i:] != ".jpg" and path[i:] != ".PNG":
-                self.DisplayError("FILE TYPEERROR", "File type must be an image (e.g. png or jpg)")
+                self.DisplayError("FILE TYPE ERROR", "File type must be an image (e.g. png or jpg)")
                 Imagepaths = self.open_dialog_box()
                 break
             
@@ -220,45 +239,68 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             return
 
         self.ImageDisplayList[0].SetPath(Imagepaths[0])
+        InfoLogger.info('\nPath of image 1 displayer 1 added ')
         self.ImageDisplayList[2].SetPath(Imagepaths[1])
+        InfoLogger.info('\nPath of image 2 displayer 1 added ')
 
         if not self.SimilarSize():
-            self.DisplayError("SIZE ERROR", "The 2 images must have same size")
+            self.DisplayError("DIMENSION ERROR", "The 2 images must have same size")
             self.SelectFiles()
         else:
+            InfoLogger.info('Images selected successfully')
             self.EnableComponents(True)
+            InfoLogger.info('\nPath of image 1 displayer 2 is passed ')
             self.ImageDisplayList[1] = MplCanvas(Imagepaths[0], 4)
+            InfoLogger.info('Object of image 1 displayer 2 Initiallized Successfully')
             self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
             self.Layout_Image1.setColumnStretch(0,1)
             self.Layout_Image1.setColumnStretch(1,1)
+            InfoLogger.info('\nPath of image 2 displayer 1 is passed ')
             self.ImageDisplayList[3] = MplCanvas(Imagepaths[1], 4)
+            InfoLogger.info('Object of image 2 displayer 2 Initiallized Successfully')
             self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
             self.Layout_Image2.setColumnStretch(0,1)
             self.Layout_Image2.setColumnStretch(1,1)
 
+            InfoLogger.info('\nPathList of Outpot 1 is passed ')
             self.ImageDisplayList[4] = MixerDisplayer(Imagepaths, 6)
+            InfoLogger.info('Object of output 1 Initiallized Successfully')
+            InfoLogger.info('\nPathList of Outpot 2 is passed ')
             self.ImageDisplayList[5] = MixerDisplayer(Imagepaths, 6)
+            InfoLogger.info('Object of output 2 Initiallized Successfully')
             self.Layout_Output1.addWidget(self.ImageDisplayList[4],1,0)
             self.Layout_Output2.addWidget(self.ImageDisplayList[5],1,0)
 
+            i=0
+            for displayer in self.ImageDisplayList:
+                i=i+1
+                InfoLogger.info('Object type of displayer {}:{}'.format(i, type(displayer)))
+
             for i in range(6):
                 self.ImageDisplayList[i].Display()
+                InfoLogger.info('Displayer {} Generated Successfully'.format(i+1))
 
-    def SimilarSize(self):        
+    def SimilarSize(self):
+        DebugLogger.debug('Image1 dimensions {}x{}, Image2 dimensions {}x{}'.format(self.ImageDisplayList[0].height(), self.ImageDisplayList[0].width(), self.ImageDisplayList[2].height(), self.ImageDisplayList[2].width()))      
         if self.ImageDisplayList[0].height() != self.ImageDisplayList[2].height() or self.ImageDisplayList[0].width() != self.ImageDisplayList[2].width():
             return False  
         return True
 
     def ImageIndexChanged(self, index):
         if index == 0:
+            InfoLogger.info('Signal emited: comboBox of image 1 changed to:{}'.format(self.Image1ComboBox.currentText()))
             self.ImageDisplayList[1].SetGraphData(self.Image1ComboBox.currentIndex())
         if index == 1:
+            InfoLogger.info('Signal emited: comboBox of image 2 changed to:{}'.format(self.Image1ComboBox.currentText()))
             self.ImageDisplayList[3].SetGraphData(self.Image2ComboBox.currentIndex())
 
     def MixerOuputChanged(self):
+        InfoLogger.info('Signal emited: {} activated'.format(self.OutputSelectorComboBox.currentText()))
         self.OutputIndex = self.OutputSelectorComboBox.currentIndex()+4 
 
     def ComponentChanged(self, index):
+        InfoLogger.info('Signal emited: component 1 image {} [fourier component: {}, slider value: {}]'.format(self.Comp1ImgSelectorComboBox.currentIndex()+1, self.Comp1TypeComboBox.currentText(), self.Component1Slider.value()))
+        InfoLogger.info('Signal emited: component 2 image {} [fourier component: {}, slider value: {}]'.format(self.Comp2ImgSelectorComboBox.currentIndex()+1, self.Comp2TypeComboBox.currentText(), self.Component2Slider.value()))
         self.ImageDisplayList[self.OutputIndex].SetMixingVariables(slider1=self.Component1Slider.value(),
         slider2=self.Component2Slider.value(),
         comp1=self.Comp1TypeComboBox.currentIndex(),

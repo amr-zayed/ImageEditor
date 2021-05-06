@@ -1,6 +1,19 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPixmap, QPainter
 from Image import Image
+import logging
+
+InfoLogger = logging.getLogger(__name__)
+InfoLogger.setLevel(logging.INFO)
+
+DebugLogger = logging.getLogger(__name__)
+DebugLogger.setLevel(logging.DEBUG)
+
+FileHandler = logging.FileHandler('ImageEditor.log')
+Formatter = logging.Formatter('%(levelname)s:%(filename)s:%(funcName)s:   %(message)s')
+FileHandler.setFormatter(Formatter)
+InfoLogger.addHandler(FileHandler)
+DebugLogger.addHandler(FileHandler)
 
 class ImageDisplay(QWidget):
     def __init__(self, parent=None):

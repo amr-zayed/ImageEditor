@@ -4,7 +4,21 @@ from numpy import asarray
 from PIL.Image import open
 from Fourier import FT
 from PIL.ImageQt import ImageQt
-  
+from os import stat
+import logging
+from math import ceil
+InfoLogger = logging.getLogger(__name__)
+InfoLogger.setLevel(logging.INFO)
+
+DebugLogger = logging.getLogger(__name__)
+DebugLogger.setLevel(logging.DEBUG)
+
+FileHandler = logging.FileHandler('ImageEditor.log')
+Formatter = logging.Formatter('%(levelname)s:%(filename)s:%(funcName)s:   %(message)s')
+FileHandler.setFormatter(Formatter)
+InfoLogger.addHandler(FileHandler)
+DebugLogger.addHandler(FileHandler)
+
 
 
 class Image(QWidget):
@@ -12,6 +26,7 @@ class Image(QWidget):
         QWidget.__init__(self, parent=parent)
         self.Path = path
         self.Count = count
+        InfoLogger.info('File Size: {}KB'.format(ceil(stat(self.Path).st_size/125)))
         self.Greysscale = open(self.Path).convert('L')
         self.MainImage = QPixmap.fromImage(ImageQt(self.Greysscale))
         self.FourierLists = []
@@ -20,6 +35,7 @@ class Image(QWidget):
                 self.FourierLists.append(asarray(self.Greysscale))
             else:
                 self.FourierLists.append(self.FourierLists[0].copy())
+        InfoLogger.info('FourierList Array Size: {}'.format(len(self.FourierLists)))
 
     def GetMainImage(self):
         return self.MainImage
