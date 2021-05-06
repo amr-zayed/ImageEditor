@@ -51,5 +51,6 @@ class MixerDisplayer(FigureCanvasQTAgg):
             comp2List = self.Image2.Image.FourierLists[self.Component2Type]
         
         self.MixedList = comp1List*(self.slider1/100) + comp2List*(self.slider2/100)
+        self.MixedList= np.abs(np.fft.ifft2(self.MixedList))
 
     
