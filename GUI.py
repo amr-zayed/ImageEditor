@@ -3,6 +3,11 @@ from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
 from FourierDisplayer import MplCanvas
 from Mixer import MixerDisplayer
+#from C_Functions import *
+from C_Functions import C_Functions
+from ctypes import c_double, c_int, CDLL
+import sys
+
 import logging
 
 InfoLogger = logging.getLogger(__name__)
@@ -27,9 +32,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         
         self.ImageDisplayList = []
         
+        #instanse of c_functions
+        self.CFunctions=C_Functions()
+
         #Adding File in menubar
         self.file_menu = QtWidgets.QMenu('File', self)
         self.file_menu.addAction('Open File', self.SelectFiles, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
+        self.file_menu.addAction('Show Graphs', self.Show_Graphs, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
         self.file_menu.addAction('Quit', self.fileQuit, QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
 
@@ -318,3 +327,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.OutputSelectorComboBox.setEnabled(bool)
         self.Component1Slider.setEnabled(bool)
         self.Component2Slider.setEnabled(bool)
+
+    def Show_Graphs(self):
+        self.CFunctions.c_graphs()
