@@ -17,8 +17,7 @@ class C_Functions(QWidget):
             print('OS %s not recognized' % (sys.platform))
             print(lib_path)
 
-        self.python_c_square = self.basic_function_lib.c_square
-        self.python_c_square.restype = c_int
+        
         self.python_c_DFT = self.basic_function_lib.DFT
         self.python_c_DFT.restype = c_double
 
@@ -58,6 +57,8 @@ class C_Functions(QWidget):
         n=0
         dftarr=[]
         fftarr=[]
+        Funcs_Err=[]
+        imgErr=[]
         #samplearr=[2^0,2^1,2^2,2^3,2^4,2^5,2^6,2^7,2^8,2^9,2^10]
         samplearr=[0,2,4,8,16,32,64,128,256,512,1024]
         #print(samplearr)
@@ -78,22 +79,40 @@ class C_Functions(QWidget):
             calct2=toc2-tic2
             fftarr.append(calct2)
 
+            difference_real = np.subtract(real_DFT, real_FFT)
+            squared_real = np.square(difference_real)
+            real_Error = squared_real.mean()
+            difference_img = np.subtract(img_DFT, img_FFT)
+            squared_img = np.square(difference_img)
+            img_Error = squared_img.mean()
+            Funcs_Err.append(((real_Error-img_Error)*(real_Error-img_Error))/2)
+            #print(Realerr,Imgerr,mse)
+
         #print(dftarr)
         fig = plt.figure()
-        dftpl = fig.add_subplot(121)
-        fftpl = fig.add_subplot(122)
+        dftpl = fig.add_subplot(131)
+        fftpl = fig.add_subplot(132)
+        Error_graph = fig.add_subplot(133)
         dftpl.set_title('DFT')
         dftpl.set_xlabel('sample no.')
         dftpl.set_ylabel('time')
+        dftpl.plot(samplearr,dftarr)
+
+        Error_graph.set_title('Mean Squared Error')
+        Error_graph.set_xlabel('sample no.')
+        Error_graph.set_ylabel('Error')
+        Error_graph.plot(samplearr,Funcs_Err)
+
         #dftpl.set_ylim(0,max(dftarr))
         #fftpl.set_ylim(0,max(dftarr))
+        
 
-        dftpl.plot(samplearr,dftarr)
-        fftpl.plot(samplearr,fftarr)
 
         fftpl.set_title('FFT')
         fftpl.set_xlabel('sample no.')
         fftpl.set_ylabel('time')
+        fftpl.plot(samplearr,fftarr)
+
         plt.show()
 
 #c_graphs()
