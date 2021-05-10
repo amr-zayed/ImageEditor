@@ -15,6 +15,7 @@ class C_Functions(QWidget):
             self.basic_function_lib = CDLL(lib_path)
         except:
             print('OS %s not recognized' % (sys.platform))
+            print(lib_path)
 
         self.python_c_square = self.basic_function_lib.c_square
         self.python_c_square.restype = c_int

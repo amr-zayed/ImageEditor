@@ -33,12 +33,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ImageDisplayList = []
         
         #instanse of c_functions
-        self.CFunctions=C_Functions()
+        #self.CFunctions=C_Functions()
 
         #Adding File in menubar
         self.file_menu = QtWidgets.QMenu('File', self)
         self.file_menu.addAction('Open File', self.SelectFiles, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
-        self.file_menu.addAction('Show Graphs', self.Show_Graphs, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
+        #self.file_menu.addAction('Show Graphs', self.Show_Graphs, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
         self.file_menu.addAction('Quit', self.fileQuit, QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
 
@@ -143,16 +143,21 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Comp2TypeComboBox.currentIndexChanged.connect(self.ComponentMapper.map)
         self.ComponentMapper.setMapping(self.Comp2TypeComboBox, 4)
         self.Comp2TypeComboBox.addItems(["Magnitude", "Phase", "Real", "Imaginary", "uniform magnitude", "uniform phase"])
+        self.Comp2TypeComboBox.setCurrentIndex(1)
         self.Layout_5thMixer.addWidget(self.Comp2TypeComboBox)
+
+        # self.MixerButton = QtWidgets.QPushButton("Apply")
+        # self.MixerButton.released.connect(lambda: self.ComponentChanged(0))
 
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
 
-        self.ImageDisplayList.append(ImageDisplay())
-        self.ImageDisplayList.append(ImageDisplay())
-        self.ImageDisplayList.append(ImageDisplay())
-        self.ImageDisplayList.append(ImageDisplay())
-        self.ImageDisplayList.append(ImageDisplay())
-        self.ImageDisplayList.append(ImageDisplay())
+        for _ in range(6):
+            self.ImageDisplayList.append(ImageDisplay())
+        # self.ImageDisplayList.append(ImageDisplay())
+        # self.ImageDisplayList.append(ImageDisplay())
+        # self.ImageDisplayList.append(ImageDisplay())
+        # self.ImageDisplayList.append(ImageDisplay())
+        # self.ImageDisplayList.append(ImageDisplay())
 
         self.Layout_Output1.addWidget(self.Output1Label, 0,0)
         self.Layout_Output1.setRowStretch(0,1)
@@ -176,6 +181,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Controls.addLayout(self.Layout_5thMixer)
         self.Layout_Controls.addWidget(self.Component2Slider)
         self.Layout_Controls.addStretch(50)
+        #self.Layout_Controls.addWidget(self.MixerButton)
 
         self.Layout_AllImages.addLayout(self.Layout_Image1, 1,1)
         self.Layout_AllImages.addLayout(self.Layout_Image2, 3,1)
@@ -310,6 +316,60 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def ComponentChanged(self, index):
         InfoLogger.info('Signal emited: component 1 image {} [fourier component: {}, slider value: {}]'.format(self.Comp1ImgSelectorComboBox.currentIndex()+1, self.Comp1TypeComboBox.currentText(), self.Component1Slider.value()))
         InfoLogger.info('Signal emited: component 2 image {} [fourier component: {}, slider value: {}]'.format(self.Comp2ImgSelectorComboBox.currentIndex()+1, self.Comp2TypeComboBox.currentText(), self.Component2Slider.value()))
+        if self.Comp1TypeComboBox.currentIndex() == 0:
+            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 4:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        if self.Comp2TypeComboBox.currentIndex() == 0:
+            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 4:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+
+        if self.Comp1TypeComboBox.currentIndex() == 1:
+            if self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        if self.Comp2TypeComboBox.currentIndex() == 1:
+            if self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        
+        if self.Comp1TypeComboBox.currentIndex() == 2:
+            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 4 or self.Comp1TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        if self.Comp2TypeComboBox.currentIndex() == 2:
+            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 4 or self.Comp1TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        
+        if self.Comp1TypeComboBox.currentIndex() == 3:
+            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 4 or self.Comp2TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        if self.Comp2TypeComboBox.currentIndex() == 3:
+            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 4 or self.Comp2TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+
+        if self.Comp1TypeComboBox.currentIndex() == 4:
+            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 4:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        if self.Comp2TypeComboBox.currentIndex() == 4:
+            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 4:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+
+        if self.Comp1TypeComboBox.currentIndex() == 5:
+            if self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+        if self.Comp2TypeComboBox.currentIndex() == 5:
+            if self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 5:
+                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                return
+
         self.ImageDisplayList[self.OutputIndex].SetMixingVariables(slider1=self.Component1Slider.value(),
         slider2=self.Component2Slider.value(),
         comp1=self.Comp1TypeComboBox.currentIndex(),
@@ -327,6 +387,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.OutputSelectorComboBox.setEnabled(bool)
         self.Component1Slider.setEnabled(bool)
         self.Component2Slider.setEnabled(bool)
+        #self.MixerButton.setEnabled(bool)
 
-    def Show_Graphs(self):
-        self.CFunctions.c_graphs()
+    # def Show_Graphs(self):
+    #     self.CFunctions.c_graphs()

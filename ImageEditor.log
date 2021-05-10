@@ -1,1 +1,51 @@
 INFO:GUI.py:__init__:   GUI created
+DEBUG:GUI.py:open_dialog_box:   Number of images selected:2
+DEBUG:GUI.py:open_dialog_box:   FileName:Colorfull image.jpg
+DEBUG:GUI.py:open_dialog_box:   FileName:Landscape.jpg
+INFO:Image.py:__init__:   File Size: 885KB
+INFO:Image.py:__init__:   FourierList Array Size: 0
+INFO:GUI.py:SelectFiles:   
+Path of image 1 displayer 1 added 
+INFO:Image.py:__init__:   File Size: 1559KB
+INFO:Image.py:__init__:   FourierList Array Size: 0
+INFO:GUI.py:SelectFiles:   
+Path of image 2 displayer 1 added 
+DEBUG:GUI.py:SimilarSize:   Image1 dimensions 720x1280, Image2 dimensions 720x1280
+INFO:GUI.py:SelectFiles:   Images selected successfully
+INFO:GUI.py:SelectFiles:   
+Path of image 1 displayer 2 is passed 
+INFO:Image.py:__init__:   File Size: 885KB
+INFO:Image.py:__init__:   FourierList Array Size: 4
+INFO:GUI.py:SelectFiles:   Object of image 1 displayer 2 Initiallized Successfully
+INFO:GUI.py:SelectFiles:   
+Path of image 2 displayer 1 is passed 
+INFO:Image.py:__init__:   File Size: 1559KB
+INFO:Image.py:__init__:   FourierList Array Size: 4
+INFO:GUI.py:SelectFiles:   Object of image 2 displayer 2 Initiallized Successfully
+INFO:GUI.py:SelectFiles:   
+PathList of Outpot 1 is passed 
+INFO:Image.py:__init__:   File Size: 885KB
+INFO:Image.py:__init__:   FourierList Array Size: 6
+INFO:Image.py:__init__:   File Size: 1559KB
+INFO:Image.py:__init__:   FourierList Array Size: 6
+INFO:GUI.py:SelectFiles:   Object of output 1 Initiallized Successfully
+INFO:GUI.py:SelectFiles:   
+PathList of Outpot 2 is passed 
+INFO:Image.py:__init__:   File Size: 885KB
+INFO:Image.py:__init__:   FourierList Array Size: 6
+INFO:Image.py:__init__:   File Size: 1559KB
+INFO:Image.py:__init__:   FourierList Array Size: 6
+INFO:GUI.py:SelectFiles:   Object of output 2 Initiallized Successfully
+INFO:GUI.py:SelectFiles:   Object type of displayer 1:<class 'ImageDisplay.ImageDisplay'>
+INFO:GUI.py:SelectFiles:   Object type of displayer 2:<class 'FourierDisplayer.MplCanvas'>
+INFO:GUI.py:SelectFiles:   Object type of displayer 3:<class 'ImageDisplay.ImageDisplay'>
+INFO:GUI.py:SelectFiles:   Object type of displayer 4:<class 'FourierDisplayer.MplCanvas'>
+INFO:GUI.py:SelectFiles:   Object type of displayer 5:<class 'Mixer.MixerDisplayer'>
+INFO:GUI.py:SelectFiles:   Object type of displayer 6:<class 'Mixer.MixerDisplayer'>
+INFO:GUI.py:SelectFiles:   Displayer 1 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 2 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 3 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 4 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 5 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 6 Generated Successfully
+INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 1 changed to:Phase
