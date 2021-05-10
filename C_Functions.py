@@ -96,7 +96,7 @@ class C_Functions(QWidget):
         dftpl.set_title('DFT')
         dftpl.set_xlabel('sample no.')
         dftpl.set_ylabel('time')
-        dftpl.plot(samplearr,dftarr)
+        dftpl.plot(samplearr[1:],dftarr[1:])
 
         Error_graph.set_title('Mean Squared Error')
         Error_graph.set_xlabel('sample no.')
@@ -111,7 +111,7 @@ class C_Functions(QWidget):
         fftpl.set_title('FFT')
         fftpl.set_xlabel('sample no.')
         fftpl.set_ylabel('time')
-        fftpl.plot(samplearr,fftarr)
+        fftpl.plot(samplearr[1:],fftarr[1:])
 
         plt.show()
 

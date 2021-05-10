@@ -33,12 +33,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ImageDisplayList = []
         
         #instanse of c_functions
-        #self.CFunctions=C_Functions()
+        self.CFunctions=C_Functions()
 
         #Adding File in menubar
         self.file_menu = QtWidgets.QMenu('File', self)
         self.file_menu.addAction('Open File', self.SelectFiles, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
-        #self.file_menu.addAction('Show Graphs', self.Show_Graphs, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
+        self.file_menu.addAction('Show Graphs', self.Show_Graphs, QtCore.Qt.CTRL + QtCore.Qt.Key_O)
         self.file_menu.addAction('Quit', self.fileQuit, QtCore.Qt.CTRL + QtCore.Qt.Key_Q)
         self.menuBar().addMenu(self.file_menu)
 
@@ -389,5 +389,5 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Component2Slider.setEnabled(bool)
         #self.MixerButton.setEnabled(bool)
 
-    # def Show_Graphs(self):
-    #     self.CFunctions.c_graphs()
+    def Show_Graphs(self):
+        self.CFunctions.c_graphs()
