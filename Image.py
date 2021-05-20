@@ -47,12 +47,9 @@ class Image(QWidget):
         return self.MainImage.width()
         
     def SetFourierLists(self):
-        isFour=False
         if self.Count==0:
             return
-        if self.Count==4:
-            isFour=True
-        self.FourierLists=FT(self.Greysscale,isFour)
+        self.FourierLists=FT(self.Greysscale)
 
 
 

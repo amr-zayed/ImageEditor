@@ -4,7 +4,7 @@ from ImageDisplay import ImageDisplay
 from FourierDisplayer import MplCanvas
 from Mixer import MixerDisplayer
 #from C_Functions import *
-from C_Functions import C_Functions
+#from C_Functions import C_Functions
 from ctypes import c_double, c_int, CDLL
 import sys
 
@@ -33,7 +33,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ImageDisplayList = []
         
         #instanse of c_functions
-        self.CFunctions=C_Functions()
+        #self.CFunctions=C_Functions()
 
         #Adding File in menubar
         self.file_menu = QtWidgets.QMenu('File', self)
@@ -146,18 +146,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Comp2TypeComboBox.setCurrentIndex(1)
         self.Layout_5thMixer.addWidget(self.Comp2TypeComboBox)
 
-        # self.MixerButton = QtWidgets.QPushButton("Apply")
-        # self.MixerButton.released.connect(lambda: self.ComponentChanged(0))
-
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
 
         for _ in range(6):
             self.ImageDisplayList.append(ImageDisplay())
-        # self.ImageDisplayList.append(ImageDisplay())
-        # self.ImageDisplayList.append(ImageDisplay())
-        # self.ImageDisplayList.append(ImageDisplay())
-        # self.ImageDisplayList.append(ImageDisplay())
-        # self.ImageDisplayList.append(ImageDisplay())
 
         self.Layout_Output1.addWidget(self.Output1Label, 0,0)
         self.Layout_Output1.setRowStretch(0,1)
@@ -181,7 +173,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Controls.addLayout(self.Layout_5thMixer)
         self.Layout_Controls.addWidget(self.Component2Slider)
         self.Layout_Controls.addStretch(50)
-        #self.Layout_Controls.addWidget(self.MixerButton)
 
         self.Layout_AllImages.addLayout(self.Layout_Image1, 1,1)
         self.Layout_AllImages.addLayout(self.Layout_Image2, 3,1)
@@ -196,6 +187,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_AllImages.setRowStretch(2,1)
         self.Layout_AllImages.setRowStretch(3, 30)
 
+        self.ComponentTypeComboBoxes = []
+        self.ComponentTypeComboBoxes.append(self.Comp1TypeComboBox)
+        self.ComponentTypeComboBoxes.append(self.Comp2TypeComboBox)
         #Creating A messagebox For errors
         self.MessageBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Warning, "Error", "Error")
 
@@ -264,18 +258,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             InfoLogger.info('Images selected successfully')
             self.EnableComponents(True)
-            InfoLogger.info('\nPath of image 1 displayer 2 is passed ')
-            self.ImageDisplayList[1] = MplCanvas(Imagepaths[0], 4)
-            InfoLogger.info('Object of image 1 displayer 2 Initiallized Successfully')
-            self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
-            self.Layout_Image1.setColumnStretch(0,1)
-            self.Layout_Image1.setColumnStretch(1,1)
-            InfoLogger.info('\nPath of image 2 displayer 1 is passed ')
-            self.ImageDisplayList[3] = MplCanvas(Imagepaths[1], 4)
-            InfoLogger.info('Object of image 2 displayer 2 Initiallized Successfully')
-            self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
-            self.Layout_Image2.setColumnStretch(0,1)
-            self.Layout_Image2.setColumnStretch(1,1)
+            for i in range(2):
+                InfoLogger.info('\nPath of image {} displayer 2 is passed '.format(i+1))
+                self.ImageDisplayList[2*i+1] = MplCanvas(Imagepaths[i], 4)
+                InfoLogger.info('Object of image 1 displayer 2 Initiallized Successfully')
+                self.Layout_Image1.addWidget(self.ImageDisplayList[2*i+1],1,1)
+                self.Layout_Image1.setColumnStretch(0,1)
+                self.Layout_Image1.setColumnStretch(1,1)
 
             InfoLogger.info('\nPathList of Outpot 1 is passed ')
             self.ImageDisplayList[4] = MixerDisplayer(Imagepaths, 6)
@@ -316,60 +305,60 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def ComponentChanged(self, index):
         InfoLogger.info('Signal emited: component 1 image {} [fourier component: {}, slider value: {}]'.format(self.Comp1ImgSelectorComboBox.currentIndex()+1, self.Comp1TypeComboBox.currentText(), self.Component1Slider.value()))
         InfoLogger.info('Signal emited: component 2 image {} [fourier component: {}, slider value: {}]'.format(self.Comp2ImgSelectorComboBox.currentIndex()+1, self.Comp2TypeComboBox.currentText(), self.Component2Slider.value()))
-        if self.Comp1TypeComboBox.currentIndex() == 0:
-            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 4:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-        if self.Comp2TypeComboBox.currentIndex() == 0:
-            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 4:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
+        AddIndex = 1
+        for i in range(2):
+            if i==1:
+                AddIndex = -1
+            if self.ComponentTypeComboBoxes[i].currentIndex() == 0:
+                if self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 0 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 2 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 3 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 4:
+                    self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
+                    return
 
-        if self.Comp1TypeComboBox.currentIndex() == 1:
-            if self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-        if self.Comp2TypeComboBox.currentIndex() == 1:
-            if self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
+        AddIndex = 1
+        for i in range(2):
+            if i==1:
+                AddIndex = -1
+            if self.ComponentTypeComboBoxes[i].currentIndex() == 1:
+                if self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 1 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 2 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 3 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 5:
+                    self.DisplayError("MIXER ERROR", "Phase component can be matched only with magnitude or uniform magnitude")
+                    return
         
-        if self.Comp1TypeComboBox.currentIndex() == 2:
-            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 4 or self.Comp1TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-        if self.Comp2TypeComboBox.currentIndex() == 2:
-            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 4 or self.Comp1TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
+        AddIndex = 1
+        for i in range(2):
+            if i==1:
+                AddIndex = -1
+            if self.ComponentTypeComboBoxes[i].currentIndex() == 2:
+                if self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 0 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 1 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 2 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 4 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 5:
+                    self.DisplayError("MIXER ERROR", "Real component can be matched only with imaginary")
+                    return
         
-        if self.Comp1TypeComboBox.currentIndex() == 3:
-            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 4 or self.Comp2TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-        if self.Comp2TypeComboBox.currentIndex() == 3:
-            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 4 or self.Comp2TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
+        AddIndex = 1
+        for i in range(2):
+            if i==1:
+                AddIndex = -1
+            if self.ComponentTypeComboBoxes[i].currentIndex() == 3:
+                if self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 0 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 1 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 3 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 4 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 5:
+                    self.DisplayError("MIXER ERROR", "Imaginary component can be matched only with real")
+                    return
 
-        if self.Comp1TypeComboBox.currentIndex() == 4:
-            if self.Comp2TypeComboBox.currentIndex() == 0 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 4:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-        if self.Comp2TypeComboBox.currentIndex() == 4:
-            if self.Comp1TypeComboBox.currentIndex() == 0 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 4:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
+        AddIndex = 1
+        for i in range(2):
+            if i==1:
+                AddIndex = -1
+            if self.ComponentTypeComboBoxes[i].currentIndex() == 4:
+                if self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 0 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 2 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 3 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 4:
+                    self.DisplayError("MIXER ERROR", "Uniform magnitude component can be matched only with phase or uniform phase")
+                    return
 
-        if self.Comp1TypeComboBox.currentIndex() == 5:
-            if self.Comp2TypeComboBox.currentIndex() == 1 or self.Comp2TypeComboBox.currentIndex() == 2 or self.Comp2TypeComboBox.currentIndex() == 3 or self.Comp2TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-        if self.Comp2TypeComboBox.currentIndex() == 5:
-            if self.Comp1TypeComboBox.currentIndex() == 1 or self.Comp1TypeComboBox.currentIndex() == 2 or self.Comp1TypeComboBox.currentIndex() == 3 or self.Comp1TypeComboBox.currentIndex() == 5:
-                self.DisplayError("MIXER ERROR", "Magnitude component can be matched only with phase or uniform phase")
-                return
-
+        AddIndex = 1
+        for i in range(2):
+            if i==1:
+                AddIndex = -1
+            if self.ComponentTypeComboBoxes[i].currentIndex() == 5:
+                if self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 1 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 2 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 3 or self.ComponentTypeComboBoxes[i+AddIndex].currentIndex() == 5:
+                    self.DisplayError("MIXER ERROR", "Uniform phase component can be matched only with magnitude or uniform magnitude")
+                    return
+        
         self.ImageDisplayList[self.OutputIndex].SetMixingVariables(slider1=self.Component1Slider.value(),
         slider2=self.Component2Slider.value(),
         comp1=self.Comp1TypeComboBox.currentIndex(),
@@ -387,7 +376,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.OutputSelectorComboBox.setEnabled(bool)
         self.Component1Slider.setEnabled(bool)
         self.Component2Slider.setEnabled(bool)
-        #self.MixerButton.setEnabled(bool)
 
     def Show_Graphs(self):
-        self.CFunctions.c_graphs()
+        pass
+        #self.CFunctions.c_graphs()

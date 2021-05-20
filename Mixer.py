@@ -40,26 +40,32 @@ class MixerDisplayer(FigureCanvasQTAgg):
         self.Display()
 
     def GetMixedList(self):
-        if self.Component1Image==0:
+        if self.Component1Type == 4 or self.Component1Type == 5:
+            if self.Component2Type == 4 or self.Component2Type == 5:
+                self.MixedList = np.ones(self.Image1.Image.FourierLists[0].shape)
+                return
+        if self.Component1Image==0 and self.Component1Type <= 3:
             comp1ListImage1 = self.Image1.Image.FourierLists[self.Component1Type]
             comp1ListImage2 = self.Image2.Image.FourierLists[self.Component1Type]
-        elif self.Component1Image==1:
+        elif self.Component1Image==1 and self.Component1Type <= 3:
             comp1ListImage1 = self.Image2.Image.FourierLists[self.Component1Type]
             comp1ListImage2 = self.Image1.Image.FourierLists[self.Component1Type]
-        if self.Component2Image==0:
+        if self.Component2Image==0 and self.Component2Type <= 3:
             comp2ListImage1 = self.Image1.Image.FourierLists[self.Component2Type]
             comp2ListImage2 = self.Image2.Image.FourierLists[self.Component2Type]
-        elif self.Component2Image==1:
+        elif self.Component2Image==1 and self.Component2Type <= 3:
             comp2ListImage1 = self.Image2.Image.FourierLists[self.Component2Type]
             comp2ListImage2 = self.Image1.Image.FourierLists[self.Component2Type]
         
-        Comp1 = comp1ListImage1*(self.slider1/100) + comp1ListImage2*(1-(self.slider1/100))
-        Comp2 = comp2ListImage1*(self.slider2/100) + comp2ListImage2*(1-(self.slider2/100))
+        if self.Component1Type <= 3:
+            Comp1 = comp1ListImage1*(self.slider1/100) + comp1ListImage2*(1-(self.slider1/100))
+        if self.Component2Type <= 3:
+            Comp2 = comp2ListImage1*(self.slider2/100) + comp2ListImage2*(1-(self.slider2/100))
 
         if self.Component1Type == 0 or self.Component1Type == 1:
             if self.Component2Type == 0 or self.Component2Type == 1:
                 if self.Component1Type == 0:
-                    Comp2 = np.exp(1j*np.angle(Comp2))
+                    Comp2 = np.exp(1j*Comp2)
                     self.MixedList = np.fft.ifft2(Comp1*Comp2)
                 else:
                     Comp1 = np.exp(1j*Comp1)
@@ -67,7 +73,7 @@ class MixerDisplayer(FigureCanvasQTAgg):
                 self.MixedList = np.abs(self.MixedList)
             else:
                 if self.Component2Type == 4:
-                    Comp1 = np.exp(1j*np.angle(Comp1))
+                    Comp1 = np.exp(1j*Comp1)
                 self.MixedList = np.fft.ifft2(Comp1)
                 self.MixedList = np.abs(self.MixedList)
                 if self.Component2Type == 4:
@@ -90,7 +96,7 @@ class MixerDisplayer(FigureCanvasQTAgg):
 
             if self.Component2Type == 0 or self.Component2Type == 1:
                 if self.Component1Type == 4:
-                    Comp2 = np.exp(1j*np.angle(Comp2))
+                    Comp2 = np.exp(1j*Comp2)
                 self.MixedList = np.fft.ifft2(Comp2)
                 self.MixedList = np.abs(self.MixedList)
                 if self.Component1Type == 4:

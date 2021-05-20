@@ -1,17 +1,12 @@
 from matplotlib import pyplot as plt
 import numpy as np
-def FT(img,isfour):
+def FT(img):
     dft= np.fft.fft2(img)
     dft_shift = np.fft.fftshift(dft)
-    phaseSpectrum = dft
+    phaseSpectrum = np.angle(dft)
     magnitudeSpectrum = np.abs(dft)
     Real = dft_shift.real
     Imag = dft_shift.imag
-    if isfour==True:
-        ComponentsList=[magnitudeSpectrum,phaseSpectrum,Real,Imag]
-    else:
-        UniformMagnitude =np.ones(magnitudeSpectrum.shape)*5
-        UniformPhase =np.zeros(phaseSpectrum.shape)
-        ComponentsList=[magnitudeSpectrum,phaseSpectrum,Real,Imag, UniformMagnitude, UniformPhase]
+    ComponentsList=[magnitudeSpectrum,phaseSpectrum,Real,Imag]
 
     return ComponentsList

@@ -6,7 +6,6 @@ from numpy.fft import fftshift
 
 class MplCanvas(FigureCanvasQTAgg):
     def __init__(self, path, count, parent=None, width=5, height=4, dpi=100):
-        #fig = Figure(figsize=(width, height), dpi=dpi)
         self.fig = Figure()
         self.ImageDisplayer = self.fig.add_subplot(111)
         super(MplCanvas, self).__init__(self.fig)
@@ -28,10 +27,6 @@ class MplCanvas(FigureCanvasQTAgg):
         print(index)
         if index == 0:
             self.GraphData = 20*log(self.Image.FourierLists[index])
-        if index == 1:
-            self.GraphData = angle(self.Image.FourierLists[index])
-        if index == 2:
-            self.GraphData = self.Image.FourierLists[index]
-        if index == 3:
+        elif index == 1 or index == 2 or index == 3:
             self.GraphData = self.Image.FourierLists[index]
         self.Display()
