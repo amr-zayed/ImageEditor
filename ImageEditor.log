@@ -11,13 +11,39 @@ Path of image 2 added and initialized
 DEBUG:GUI.py:SimilarSize:   Image1 dimensions 1280x720, Image2 dimensions 1280x720
 INFO:GUI.py:SelectFiles:   Images selected successfully
 INFO:Image1.py:SetFourierLists:   FourierList created successfully
-INFO:GUI.py:SelectFiles:   Displayer 1 Generated Successfully
 INFO:Image1.py:SetFourierLists:   FourierList created successfully
+INFO:GUI.py:SelectFiles:   Displayer 0 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 1 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 4 Generated Successfully
 INFO:GUI.py:SelectFiles:   Displayer 2 Generated Successfully
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 1 changed to:Real component
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 1 changed to:Imaginary component
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 1 changed to:Phase
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 1 changed to:Magnitude
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 2 changed to:Magnitude
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 2 changed to:Magnitude
-INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 2 changed to:Magnitude
+INFO:GUI.py:SelectFiles:   Displayer 3 Generated Successfully
+INFO:GUI.py:SelectFiles:   Displayer 5 Generated Successfully
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 64]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 45]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 58]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 45]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 94]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 45]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 94]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 0]
+INFO:GUI.py:MixerOuputChanged:   Signal emited: Output 2 activated
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 59]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 38]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 38]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 34]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 38]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 72]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 38]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 99]

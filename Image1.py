@@ -67,23 +67,23 @@ class Image(QWidget):
         ComponentsList=[magnitudeSpectrum,phaseSpectrum,Real,Imag]
         return ComponentsList
 
-    def GetMixedList(self, slider1=0, slider2=0, comp1type=0, comp2type=0, comp1img=0, comp2img=0):
+    def GetMixedList(self, Image2, slider1=0, slider2=0, comp1type=0, comp2type=0, comp1img=0, comp2img=0):
         if comp1type == 4 or comp1type == 5:
             if comp2type == 4 or comp2type == 5:
-                self.MixedList = np.ones(self.Image1.Image.FourierLists[0].shape)
+                self.MixedList = np.ones(self.FourierLists[0].shape)
                 return
         if comp1img==0 and comp1type <= 3:
-            comp1ListImage1 = self.Image1.Image.FourierLists[comp1type]
-            comp1ListImage2 = self.Image2.Image.FourierLists[comp1type]
+            comp1ListImage1 = self.FourierLists[comp1type]
+            comp1ListImage2 = Image2.FourierLists[comp1type]
         elif comp1img==1 and comp1type <= 3:
-            comp1ListImage1 = self.Image2.Image.FourierLists[comp1type]
-            comp1ListImage2 = self.Image1.Image.FourierLists[comp1type]
+            comp1ListImage1 = Image2.FourierLists[comp1type]
+            comp1ListImage2 = self.FourierLists[comp1type]
         if comp2type==0 and comp2type <= 3:
-            comp2ListImage1 = self.Image1.Image.FourierLists[comp2type]
-            comp2ListImage2 = self.Image2.Image.FourierLists[comp2type]
+            comp2ListImage1 = self.FourierLists[comp2type]
+            comp2ListImage2 = Image2.FourierLists[comp2type]
         elif comp2type==1 and comp2type <= 3:
-            comp2ListImage1 = self.Image2.Image.FourierLists[comp2type]
-            comp2ListImage2 = self.Image1.Image.FourierLists[comp2type]
+            comp2ListImage1 = Image2.FourierLists[comp2type]
+            comp2ListImage2 = self.FourierLists[comp2type]
         
         if comp1type <= 3:
             Comp1 = comp1ListImage1*(slider1/100) + comp1ListImage2*(1-(slider1/100))

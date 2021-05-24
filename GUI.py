@@ -150,16 +150,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
 
-        self.Layout_Output1.addWidget(self.Output1Label, 0,0)
-        self.Layout_Output1.setRowStretch(0,1)
-        self.Layout_Output1.setRowStretch(1,30)
-        self.Layout_Output2.addWidget(self.Output2Label, 0,0)
-        self.Layout_Output2.setRowStretch(0,1)
-        self.Layout_Output2.setRowStretch(1,30)
-
         self.ImageList = []
         for _ in range(6):
             self.ImageDisplayList.append(ImageDisplay())
+
+        self.Layout_Output1.addWidget(self.Output1Label, 0,0)
+        self.Layout_Output1.setRowStretch(0,1)
+        self.Layout_Output1.addWidget(self.ImageDisplayList[4],1,0)
+        self.Layout_Output1.setRowStretch(1,30)
+        self.Layout_Output2.addWidget(self.Output2Label, 0,0)
+        self.Layout_Output2.setRowStretch(0,1)
+        self.Layout_Output2.addWidget(self.ImageDisplayList[5],1,0)
+        self.Layout_Output2.setRowStretch(1,30)
 
         self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
         self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
@@ -262,11 +264,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         else:
             InfoLogger.info('Images selected successfully')
             self.EnableComponents(True)
+            self.ImageList[0].SetFourierLists()
+            self.ImageList[1].SetFourierLists()
             for i in range(2):
-                self.ImageList[i].SetFourierLists()
                 self.ImageDisplayList[2*i].Display(self.ImageList[i].GetMainImage())
+                InfoLogger.info('Displayer {} Generated Successfully'.format(2*i))
                 self.ImageDisplayList[2*i+1].Display(self.ImageList[i].GetFourierElement(0))
-                InfoLogger.info('Displayer {} Generated Successfully'.format(i+1))
+                InfoLogger.info('Displayer {} Generated Successfully'.format(2*i+1))
+                self.ImageDisplayList[i+4].Display(self.ImageList[i].GetMixedList(self.ImageList[-i+1]))
+                InfoLogger.info('Displayer {} Generated Successfully'.format(i+4))
 
     def SimilarSize(self):
         DebugLogger.debug('Image1 dimensions {}x{}, Image2 dimensions {}x{}'.format(self.ImageList[0].height(), self.ImageList[0].width(), self.ImageList[1].height(), self.ImageList[1].width()))      
@@ -343,12 +349,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                     self.DisplayError("MIXER ERROR", "Uniform phase component can be matched only with magnitude or uniform magnitude")
                     return
         
-        self.ImageDisplayList[self.OutputIndex].SetMixingVariables(slider1=self.Component1Slider.value(),
+        MixedList = self.ImageList[self.OutputIndex-4].GetMixedList(self.ImageList[-self.OutputIndex+5], slider1=self.Component1Slider.value(),
         slider2=self.Component2Slider.value(),
-        comp1=self.Comp1TypeComboBox.currentIndex(),
-        comp2=self.Comp2TypeComboBox.currentIndex(),
+        comp1type=self.Comp1TypeComboBox.currentIndex(),
+        comp2type=self.Comp2TypeComboBox.currentIndex(),
         comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
         comp2img=self.Comp2ImgSelectorComboBox.currentIndex())
+        self.ImageDisplayList[self.OutputIndex].Display(MixedList)
 
     def EnableComponents(self, bool):
         self.Image1ComboBox.setEnabled(bool)
