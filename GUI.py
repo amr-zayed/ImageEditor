@@ -1,9 +1,7 @@
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
-from FourierDisplayer import MplCanvas
-from Mixer import MixerDisplayer
-from Image1 import Image
+from Image import Image
 from numpy import log
 #from C_Functions import *
 #from C_Functions import C_Functions
@@ -271,7 +269,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
                 InfoLogger.info('Displayer {} Generated Successfully'.format(2*i))
                 self.ImageDisplayList[2*i+1].Display(self.ImageList[i].GetFourierElement(0))
                 InfoLogger.info('Displayer {} Generated Successfully'.format(2*i+1))
-                self.ImageDisplayList[i+4].Display(self.ImageList[i].GetMixedList(self.ImageList[-i+1]))
+                self.ImageDisplayList[i+4].Display(self.ImageList[i].GetMixedList(self.ImageList[-i+1], comp2type=1))
                 InfoLogger.info('Displayer {} Generated Successfully'.format(i+4))
 
     def SimilarSize(self):
