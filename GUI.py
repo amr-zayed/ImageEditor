@@ -3,6 +3,8 @@ from PyQt5.QtGui import *
 from ImageDisplay import ImageDisplay
 from FourierDisplayer import MplCanvas
 from Mixer import MixerDisplayer
+from Image1 import Image
+from numpy import log
 #from C_Functions import *
 #from C_Functions import C_Functions
 from ctypes import c_double, c_int, CDLL
@@ -148,9 +150,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ComponentMapper.mapped.connect(self.ComponentChanged)
 
-        for _ in range(6):
-            self.ImageDisplayList.append(ImageDisplay())
-
         self.Layout_Output1.addWidget(self.Output1Label, 0,0)
         self.Layout_Output1.setRowStretch(0,1)
         self.Layout_Output1.setRowStretch(1,30)
@@ -158,9 +157,15 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Layout_Output2.setRowStretch(0,1)
         self.Layout_Output2.setRowStretch(1,30)
 
+        self.ImageList = []
+        for _ in range(6):
+            self.ImageDisplayList.append(ImageDisplay())
+
         self.Layout_Image1.addWidget(self.ImageDisplayList[0],1,0)
+        self.Layout_Image1.addWidget(self.ImageDisplayList[1],1,1)
         self.Layout_Image1.setRowStretch(1,30)
         self.Layout_Image2.addWidget(self.ImageDisplayList[2],1,0)
+        self.Layout_Image2.addWidget(self.ImageDisplayList[3],1,1)
         self.Layout_Image2.setRowStretch(1,30)
 
         self.Layout_Controls.addLayout(self.Layout_1stMixer)
@@ -247,10 +252,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         if len(Imagepaths)==0:
             return
 
-        self.ImageDisplayList[0].SetPath(Imagepaths[0])
-        InfoLogger.info('\nPath of image 1 displayer 1 added ')
-        self.ImageDisplayList[2].SetPath(Imagepaths[1])
-        InfoLogger.info('\nPath of image 2 displayer 1 added ')
+        for i in range(2):
+            self.ImageList.append(Image(Imagepaths[i]))
+            InfoLogger.info('\nPath of image {} added and initialized'.format(i+1))
 
         if not self.SimilarSize():
             self.DisplayError("DIMENSION ERROR", "The 2 images must have same size")
@@ -259,44 +263,24 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             InfoLogger.info('Images selected successfully')
             self.EnableComponents(True)
             for i in range(2):
-                InfoLogger.info('\nPath of image {} displayer 2 is passed '.format(i+1))
-                self.ImageDisplayList[2*i+1] = MplCanvas(Imagepaths[i], 4)
-                InfoLogger.info('Object of image 1 displayer 2 Initiallized Successfully')
-                self.Layout_Image1.addWidget(self.ImageDisplayList[2*i+1],1,1)
-                self.Layout_Image1.setColumnStretch(0,1)
-                self.Layout_Image1.setColumnStretch(1,1)
-
-            InfoLogger.info('\nPathList of Outpot 1 is passed ')
-            self.ImageDisplayList[4] = MixerDisplayer(Imagepaths, 6)
-            InfoLogger.info('Object of output 1 Initiallized Successfully')
-            InfoLogger.info('\nPathList of Outpot 2 is passed ')
-            self.ImageDisplayList[5] = MixerDisplayer(Imagepaths, 6)
-            InfoLogger.info('Object of output 2 Initiallized Successfully')
-            self.Layout_Output1.addWidget(self.ImageDisplayList[4],1,0)
-            self.Layout_Output2.addWidget(self.ImageDisplayList[5],1,0)
-
-            i=0
-            for displayer in self.ImageDisplayList:
-                i=i+1
-                InfoLogger.info('Object type of displayer {}:{}'.format(i, type(displayer)))
-
-            for i in range(6):
-                self.ImageDisplayList[i].Display()
+                self.ImageList[i].SetFourierLists()
+                self.ImageDisplayList[2*i].Display(self.ImageList[i].GetMainImage())
+                self.ImageDisplayList[2*i+1].Display(self.ImageList[i].GetFourierElement(0))
                 InfoLogger.info('Displayer {} Generated Successfully'.format(i+1))
 
     def SimilarSize(self):
-        DebugLogger.debug('Image1 dimensions {}x{}, Image2 dimensions {}x{}'.format(self.ImageDisplayList[0].height(), self.ImageDisplayList[0].width(), self.ImageDisplayList[2].height(), self.ImageDisplayList[2].width()))      
-        if self.ImageDisplayList[0].height() != self.ImageDisplayList[2].height() or self.ImageDisplayList[0].width() != self.ImageDisplayList[2].width():
+        DebugLogger.debug('Image1 dimensions {}x{}, Image2 dimensions {}x{}'.format(self.ImageList[0].height(), self.ImageList[0].width(), self.ImageList[1].height(), self.ImageList[1].width()))      
+        if self.ImageList[0].height() != self.ImageList[1].height() or self.ImageList[0].width() != self.ImageList[1].width():
             return False  
         return True
 
     def ImageIndexChanged(self, index):
         if index == 0:
             InfoLogger.info('Signal emited: comboBox of image 1 changed to:{}'.format(self.Image1ComboBox.currentText()))
-            self.ImageDisplayList[1].SetGraphData(self.Image1ComboBox.currentIndex())
+            self.ImageDisplayList[1].Display(self.ImageList[0].GetFourierElement(self.Image1ComboBox.currentIndex()))
         if index == 1:
             InfoLogger.info('Signal emited: comboBox of image 2 changed to:{}'.format(self.Image1ComboBox.currentText()))
-            self.ImageDisplayList[3].SetGraphData(self.Image2ComboBox.currentIndex())
+            self.ImageDisplayList[3].Display(self.ImageList[1].GetFourierElement(self.Image2ComboBox.currentIndex()))
 
     def MixerOuputChanged(self):
         InfoLogger.info('Signal emited: {} activated'.format(self.OutputSelectorComboBox.currentText()))

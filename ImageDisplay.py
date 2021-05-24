@@ -1,8 +1,12 @@
+from PIL.ImageQt import ImageQt
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPixmap, QPainter
+from PyQt5.QtGui import QPixmap, QPainter, QImage
 from PyQt5.QtCore import Qt, QRect
 from Image import Image
 import logging
+import numpy as np
+from PIL.Image import fromarray
+import cv2
 
 InfoLogger = logging.getLogger(__name__)
 InfoLogger.setLevel(logging.INFO)
@@ -20,20 +24,16 @@ class ImageDisplay(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent=parent)
         self.ImageDisplayer = QPixmap()
-        self.Image = None
 
-    def SetPath(self, imagePath):
-        self.Image = Image(imagePath)
-
-    def Display(self):
-        self.ImageDisplayer = self.Image.GetMainImage()
+    def Display(self, image):
+        pixmap = self.ArrToQpixmap(image)
+        self.ImageDisplayer = pixmap
         self.update()
 
     def paintEvent(self, event):
         if not self.ImageDisplayer.isNull():
             height = 0
             width = 0
-            #print("Width: ", event.rect().width(), " height: ", event.rect().height(),"\n")
             painter = QPainter(self)
             painter.setRenderHint(QPainter.SmoothPixmapTransform)
 
@@ -44,9 +44,8 @@ class ImageDisplay(QWidget):
 
             painter.drawPixmap(QRect(0 ,HeightShift ,width, height), self.ImageDisplayer)
 
-    def height(self):
-        return self.Image.height()
-    
-    def width(self):
-        return self.Image.width()
-
+    def ArrToQpixmap(self,array):
+        image = fromarray(array.astype(np.int8), 'L')
+        image = ImageQt(image)
+        image = QPixmap.fromImage(image)
+        return image
