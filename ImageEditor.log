@@ -18,3 +18,24 @@ INFO:GUI.py:SelectFiles:   Displayer 4 Generated Successfully
 INFO:GUI.py:SelectFiles:   Displayer 2 Generated Successfully
 INFO:GUI.py:SelectFiles:   Displayer 3 Generated Successfully
 INFO:GUI.py:SelectFiles:   Displayer 5 Generated Successfully
+INFO:GUI.py:ImageIndexChanged:   Signal emited: comboBox of image 1 changed to:Real component
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Magnitude, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Phase, slider value: 0]
+DEBUG:GUI.py:DisplayError:   MIXER ERROR
+
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Imaginary, slider value: 0]
+DEBUG:GUI.py:DisplayError:   MIXER ERROR
+
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Real, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Real, slider value: 55]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Real, slider value: 57]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 77]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Real, slider value: 0]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 1 image 1 [fourier component: Imaginary, slider value: 99]
+INFO:GUI.py:ComponentChanged:   Signal emited: component 2 image 1 [fourier component: Real, slider value: 0]

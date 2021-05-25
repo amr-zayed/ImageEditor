@@ -6,7 +6,6 @@ from Image import Image
 import logging
 import numpy as np
 from PIL.Image import fromarray
-import cv2
 
 InfoLogger = logging.getLogger(__name__)
 InfoLogger.setLevel(logging.INFO)

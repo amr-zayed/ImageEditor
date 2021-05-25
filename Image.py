@@ -6,7 +6,7 @@ from PIL.Image import open
 from os import stat
 import logging
 from math import ceil
-import cv2
+
 
 InfoLogger = logging.getLogger(__name__)
 InfoLogger.setLevel(logging.INFO)
@@ -23,10 +23,9 @@ DebugLogger.addHandler(FileHandler)
 
 
 class Image(QWidget):
-    def __init__(self, path, count=10, parent=None):
+    def __init__(self, path, parent=None):
         QWidget.__init__(self, parent=parent)
         self.Path = path
-        self.Count = count
         InfoLogger.info('File Size: {}KB'.format(ceil(stat(self.Path).st_size/125)))
         self.Greysscale = open(self.Path).convert('L')
         self.MainImage = np.asarray(self.Greysscale, dtype=np.uint8)
@@ -71,7 +70,8 @@ class Image(QWidget):
         if comp1type == 4 or comp1type == 5:
             if comp2type == 4 or comp2type == 5:
                 self.MixedList = np.ones(self.FourierLists[0].shape)
-                return
+                return self.MixedList
+
         if comp1img==0 and comp1type <= 3:
             comp1ListImage1 = self.FourierLists[comp1type]
             comp1ListImage2 = Image2.FourierLists[comp1type]

@@ -258,6 +258,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         if not self.SimilarSize():
             self.DisplayError("DIMENSION ERROR", "The 2 images must have same size")
+            self.ImageList = []
             self.SelectFiles()
         else:
             InfoLogger.info('Images selected successfully')
@@ -353,6 +354,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         comp2type=self.Comp2TypeComboBox.currentIndex(),
         comp1img=self.Comp1ImgSelectorComboBox.currentIndex(),
         comp2img=self.Comp2ImgSelectorComboBox.currentIndex())
+        
         self.ImageDisplayList[self.OutputIndex].Display(MixedList)
 
     def EnableComponents(self, bool):
