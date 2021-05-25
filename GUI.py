@@ -4,7 +4,7 @@ from ImageDisplay import ImageDisplay
 from Image import Image
 from numpy import log
 #from C_Functions import *
-#from C_Functions import C_Functions
+from C_Functions import C_Functions
 from ctypes import c_double, c_int, CDLL
 import sys
 
@@ -33,7 +33,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ImageDisplayList = []
         
         #instanse of c_functions
-        #self.CFunctions=C_Functions()
+        self.CFunctions=C_Functions()
 
         #Adding File in menubar
         self.file_menu = QtWidgets.QMenu('File', self)
@@ -367,5 +367,4 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.Component2Slider.setEnabled(bool)
 
     def Show_Graphs(self):
-        pass
-        #self.CFunctions.c_graphs()
+        self.CFunctions.c_graphs()

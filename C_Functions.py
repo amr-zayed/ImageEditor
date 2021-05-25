@@ -103,8 +103,8 @@ class C_Functions(QWidget):
         Error_graph.set_ylabel('Error')
         Error_graph.plot(samplearr,Funcs_Err)
 
-        #dftpl.set_ylim(0,max(dftarr))
-        #fftpl.set_ylim(0,max(dftarr))
+        dftpl.set_ylim(0,max(dftarr))
+        fftpl.set_ylim(0,max(dftarr))
         
 
 
